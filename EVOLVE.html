@@ -520,6 +520,7 @@ body.cursor-hover .cursor-dot {
 .stage model-viewer {
   width: min(72vw, 900px);
   height: min(72vh, 720px);
+  transform: translateY(38px);
   pointer-events: auto;
   --poster-color: transparent;
   --progress-bar-color: #fff;
@@ -680,7 +681,7 @@ body.cursor-hover .cursor-dot {
   .detail-meta { padding-top: 30px; }
   .stage { inset: 105px 0 94px; }
   .stage::before { width: 82vw; height: 82vw; }
-  .stage model-viewer { width: 94vw; height: 62vh; }
+  .stage model-viewer { width: 94vw; height: 62vh; transform: translateY(24px); }
   .detail-nav { left: 20px; right: 20px; bottom: 18px; }
   .timeline { margin: 0 8px; }
   .timeline-btn { width: 38px; }
@@ -1092,10 +1093,10 @@ function selectProduct(index) {
 
   model.src = product.modelSrc;
   
-  // 핵심 1: 초점(camera-target)을 위로 5cm 올리고 FOV를 키워서 상단 잘림 원천 방지
-  model.cameraTarget = '0m 0.05m 0m';
-  model.cameraOrbit = '0deg 75deg 200%';
-  model.fieldOfView = '35deg';
+  // 모델이 잘리지 않도록 카메라 거리를 늘리고 화면 안에서 아래로 배치
+  model.cameraTarget = 'auto auto auto';
+  model.cameraOrbit = '0deg 75deg 175%';
+  model.fieldOfView = '30deg';
 
   if (currentProduct === 0) {
     model.autoRotate = false;
