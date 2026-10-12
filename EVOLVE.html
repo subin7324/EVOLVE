@@ -1,0 +1,1208 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>EVOLVE</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400&display=swap" rel="stylesheet">
+<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+
+<style>
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  background: #000;
+  color: #fff;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+  overflow-x: hidden;
+  cursor: none; /* 기본 커서 숨김 */
+}
+
+
+/* =========================================
+   CUSTOM CURSOR
+========================================= */
+
+.cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 6px;
+  height: 6px;
+  background-color: #fff;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  transition: transform 0.1s ease, opacity 0.2s ease;
+}
+
+.cursor-circle {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99998;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s ease, height 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
+}
+
+/* 요소 호버 시 커서 변화 */
+body.cursor-hover .cursor-circle {
+  width: 56px;
+  height: 56px;
+  border-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+body.cursor-hover .cursor-dot {
+  transform: translate(-50%, -50%) scale(1.5);
+}
+
+
+/* =========================================
+   GLOBAL PERSISTENT HEADER & TOP INFO
+========================================= */
+
+.header {
+  position: fixed;
+  z-index: 9999;
+  left: 34px;
+  top: 28px;
+  font-family: "Bodoni Moda", "Times New Roman", serif;
+  pointer-events: auto;
+}
+
+.logo {
+  font-size: 26px;
+  font-weight: 400;
+  letter-spacing: -.04em;
+  cursor: pointer;
+}
+
+.top-info {
+  position: fixed;
+  z-index: 9999;
+  right: 34px;
+  top: 28px;
+  width: max-content;
+  text-align: right;
+  padding: 0;
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 11px;
+  line-height: 1.5;
+  letter-spacing: .08em;
+  color: #bbb;
+  pointer-events: none;
+}
+
+
+/* =========================================
+   INTRO
+========================================= */
+
+.intro {
+  height: 520vh;
+  position: relative;
+}
+
+.sticky {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: #000;
+}
+
+
+/* =========================================
+   FRAME
+========================================= */
+
+#frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+
+/* =========================================
+   DARK OVERLAY
+========================================= */
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: rgba(0, 0, 0, 0.79);
+}
+
+
+/* =========================================
+   MAIN COPY
+========================================= */
+
+.copy {
+  position: absolute;
+  z-index: 3;
+  left: 7%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48vw;
+  max-width: 800px;
+}
+
+.copy small {
+  display: block;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  letter-spacing: .2em;
+  margin-bottom: 20px;
+}
+
+.copy h1 {
+  margin: 0 0 36px;
+  font-family: "Bodoni Moda", "Times New Roman", serif;
+  font-size: clamp(100px, 14vw, 230px);
+  font-weight: 400;
+  line-height: .78;
+  letter-spacing: -.075em;
+  white-space: nowrap;
+}
+
+.copy h1 .period {
+  display: inline-block;
+  margin-left: .14em;
+  letter-spacing: 0;
+}
+
+.copy p {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  line-height: 1.7;
+  max-width: 400px;
+  color: #ddd;
+}
+
+
+/* =========================================
+   RIGHT SIDE COPY
+========================================= */
+
+.side {
+  position: absolute;
+  z-index: 3;
+  right: 7%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 360px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.side .n {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 11px;
+  letter-spacing: .2em;
+  color: #aaa;
+  margin-bottom: 22px;
+}
+
+.side h2 {
+  margin: 0 0 22px;
+  font-family: "Bodoni Moda", "Times New Roman", serif;
+  font-size: clamp(40px, 5vw, 68px);
+  font-weight: 400;
+  line-height: .9;
+  letter-spacing: -.055em;
+}
+
+.side p {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  line-height: 1.75;
+  color: #bbb;
+  max-width: 290px;
+}
+
+
+/* =========================================
+   SCROLL BAR
+========================================= */
+
+.bar {
+  position: absolute;
+  z-index: 4;
+  right: 34px;
+  top: 50%;
+  width: 1px;
+  height: 120px;
+  background: rgba(255,255,255,.22);
+  transform: translateY(-50%);
+}
+
+.bar i {
+  display: block;
+  width: 1px;
+  height: 0;
+  background: #fff;
+}
+
+
+/* =========================================
+   BLACK FADE
+========================================= */
+
+.black {
+  position: absolute;
+  z-index: 5;
+  inset: 0;
+  background: #000;
+  opacity: 0;
+  pointer-events: none;
+}
+
+
+/* =========================================
+   ARCHIVE MAIN SECTION
+========================================= */
+
+.archive-section {
+  position: relative;
+  z-index: 10;
+  background: #000;
+  min-height: 100vh;
+}
+
+.hero {
+  padding: 140px 34px 60px;
+}
+
+.hero h1 {
+  font-size: clamp(72px, 14vw, 190px);
+  line-height: .78;
+  letter-spacing: -.085em;
+  margin: 0 0 38px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.hero p {
+  font-size: 16px;
+  line-height: 1.5;
+  color: #aaa;
+  max-width: 440px;
+}
+
+
+/* =========================================
+   3D STACKED GRID
+========================================= */
+
+.grid {
+  padding: 40px 10vw 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  perspective: 1200px;
+}
+
+.card {
+  cursor: pointer;
+  width: 100%;
+  max-width: 780px;
+  position: relative;
+  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), z-index 0.3s;
+  will-change: transform;
+}
+
+.card:not(:first-child) {
+  margin-top: -120px;
+}
+
+.card:nth-child(1) { transform: rotate(-5deg) translateX(-6%) translateZ(0); z-index: 1; }
+.card:nth-child(2) { transform: rotate(6deg) translateX(8%) translateZ(0); z-index: 2; }
+.card:nth-child(3) { transform: rotate(-4deg) translateX(-4%) translateZ(0); z-index: 3; }
+.card:nth-child(4) { transform: rotate(5deg) translateX(7%) translateZ(0); z-index: 4; }
+.card:nth-child(5) { transform: rotate(-6deg) translateX(-5%) translateZ(0); z-index: 5; }
+.card:nth-child(6) { transform: rotate(4deg) translateX(6%) translateZ(0); z-index: 6; }
+
+.card:hover {
+  z-index: 30 !important;
+  transform: rotate(0deg) translateX(0) scale(1.04) translateZ(50px) !important;
+}
+
+.video-wrap {
+  aspect-ratio: 1.5;
+  overflow: hidden;
+  background: #111;
+  position: relative;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8);
+}
+
+.video-wrap video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform .7s cubic-bezier(.2,.7,.2,1);
+}
+
+.card:hover video {
+  transform: scale(1.035);
+}
+
+.meta {
+  padding: 18px 8px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+}
+
+.title { font-size: 19px; color: #fff; }
+.desc { font-size: 13px; color: #aaa; margin-top: 8px; line-height: 1.45; }
+.year { font-size: 12px; color: #777; }
+
+.hint {
+  position: absolute;
+  right: 18px;
+  bottom: 16px;
+  background: rgba(0,0,0,.85);
+  color: #fff;
+  border: 1px solid #333;
+  padding: 8px 11px;
+  border-radius: 20px;
+  font-size: 11px;
+  opacity: 0;
+  transform: translateY(5px);
+  transition: .3s;
+}
+
+.card:hover .hint {
+  opacity: 1;
+  transform: none;
+}
+
+
+/* =========================================
+   PRODUCT DETAIL
+========================================= */
+
+#detail {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  overflow: hidden;
+  background: #050505;
+}
+
+.detail-head {
+  position: absolute;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 104px 5vw 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  pointer-events: none;
+}
+
+.detail-head > div {
+  pointer-events: auto;
+}
+
+.back {
+  position: relative;
+  z-index: 1001;
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  min-width: 150px;
+  min-height: 44px;
+  padding: 10px 0;
+  margin: 0 0 28px 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  appearance: none;
+  -webkit-appearance: none;
+  font: inherit;
+  font-size: 11px;
+  letter-spacing: .08em;
+  color: #888;
+  cursor: pointer;
+  text-align: left;
+  transition: color .25s ease;
+}
+
+.back:hover {
+  color: #fff;
+  background: transparent;
+}
+
+.detail-title {
+  margin: 0;
+  font-family: "Bodoni Moda", "Times New Roman", serif;
+  font-size: clamp(58px, 8vw, 126px);
+  font-weight: 400;
+  letter-spacing: -.075em;
+  line-height: .78;
+  color: #fff;
+}
+
+.detail-meta {
+  padding-top: 38px;
+  text-align: right;
+}
+
+.detail-index {
+  display: block;
+  margin-bottom: 9px;
+  font-size: 10px;
+  letter-spacing: .16em;
+  color: #666;
+}
+
+.detail-year {
+  font-size: 13px;
+  letter-spacing: .08em;
+  color: #aaa;
+}
+
+.stage {
+  position: absolute;
+  inset: 70px 0 104px;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle at 50% 48%, rgba(255,255,255,.055), transparent 38%),
+    linear-gradient(180deg, #080808 0%, #101010 100%);
+}
+
+.stage::before {
+  content: "";
+  position: absolute;
+  width: min(58vw, 760px);
+  height: min(58vw, 760px);
+  border: 1px solid rgba(255,255,255,.055);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.stage model-viewer {
+  width: min(72vw, 900px);
+  height: min(72vh, 720px);
+  pointer-events: auto;
+  --poster-color: transparent;
+  --progress-bar-color: #fff;
+  --progress-mask: #111;
+  filter: drop-shadow(0 35px 45px rgba(0,0,0,.55));
+}
+
+.stage .click {
+  position: absolute;
+  left: 50%;
+  bottom: 22px;
+  transform: translateX(-50%);
+  font-size: 10px;
+  letter-spacing: .16em;
+  color: #666;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.detail-nav {
+  position: absolute;
+  z-index: 5;
+  left: 5vw;
+  right: 5vw;
+  bottom: 25px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.detail-arrow {
+  width: 42px;
+  height: 42px;
+  border: 1px solid #333;
+  background: transparent;
+  color: #aaa;
+  cursor: pointer;
+  font: inherit;
+  transition: .25s ease;
+}
+
+.detail-arrow:hover {
+  color: #fff;
+  border-color: #777;
+  background: #111;
+}
+
+.timeline {
+  flex: 1;
+  max-width: 720px;
+  margin: 0 24px;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  align-items: center;
+  position: relative;
+}
+
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background: #292929;
+}
+
+.timeline-item {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.timeline-btn {
+  width: 54px;
+  height: 42px;
+  padding: 0;
+  border: 0;
+  background: #050505;
+  color: #666;
+  font: 10px Arial, Helvetica, sans-serif;
+  letter-spacing: .04em;
+  cursor: pointer;
+  transition: .25s ease;
+}
+
+.timeline-btn:hover { color: #fff; }
+
+.timeline-btn.active {
+  color: #fff;
+}
+
+.timeline-btn.active::before {
+  content: "";
+  display: block;
+  width: 6px;
+  height: 6px;
+  margin: 0 auto 7px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+/* =========================================
+   EXPLODE
+========================================= */
+
+#explode {
+  display: none;
+  position: fixed;
+  z-index: 60;
+  inset: 0;
+  background: #050505;
+}
+
+.explode-head { position: absolute; z-index: 5; top: 28px; left: 34px; right: 34px; display: flex; justify-content: space-between; }
+.explode-title { font-size: 14px; color: #fff; }
+.close { cursor: pointer; color: #aaa; }
+.explode-stage { position: absolute; inset: 70px 0 0; display: grid; place-items: center; }
+.explode-stage model-viewer { width: 88%; height: 88%; --poster-color: transparent; }
+.explode-labels { position: absolute; left: 34px; bottom: 32px; display: grid; gap: 8px; font-size: 11px; color: #aaa; }
+.explode-labels span { padding: 7px 9px; background: rgba(20,20,20,.8); border: 1px solid #333; color: #eee; backdrop-filter: blur(8px); }
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 768px) {
+
+  body {
+    cursor: auto;
+  }
+
+  .cursor-dot,
+  .cursor-circle {
+    display: none;
+  }
+
+  .header { left: 20px; top: 20px; }
+  .logo { font-size: 22px; }
+  .top-info { right: 34px; top: 28px; font-size: 9px; }
+  .copy { left: 7%; width: 80vw; }
+  .copy small { font-size: 10px; }
+  .copy h1 { font-size: 20vw; }
+  .copy p { font-size: 12px; }
+  .side { right: 7%; width: 200px; }
+  .side .n { font-size: 9px; }
+  .side h2 { font-size: 34px; }
+  .side p { font-size: 11px; }
+  .bar { right: 20px; }
+
+  .grid { padding: 20px 4vw 120px; }
+  .card:not(:first-child) { margin-top: -60px; }
+  .card:nth-child(odd), .card:nth-child(even) { transform: rotate(0deg) translateX(0) !important; }
+  .detail-head { padding: 88px 20px 0; }
+  .detail-title { font-size: 17vw; }
+  .detail-meta { padding-top: 30px; }
+  .stage { inset: 105px 0 94px; }
+  .stage::before { width: 82vw; height: 82vw; }
+  .stage model-viewer { width: 94vw; height: 62vh; }
+  .detail-nav { left: 20px; right: 20px; bottom: 18px; }
+  .timeline { margin: 0 8px; }
+  .timeline-btn { width: 38px; }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+<!-- PERSISTENT HEADER & TOP INFO -->
+<div class="header">
+  <div class="logo" onclick="goHome()">
+    EVOLVE.
+  </div>
+</div>
+
+<div class="top-info">
+  PRODUCT EVOLUTION ARCHIVE<br>
+  INTERACTIVE 3D EXPERIENCE
+</div>
+
+
+<!-- CUSTOM CURSOR -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-circle" id="cursorCircle"></div>
+
+
+<!-- INTRO SECTION -->
+<section class="intro" id="intro">
+
+  <div class="sticky">
+
+    <!-- FRAME -->
+    <img id="frame" src="frames/frame_00000.png" alt="" draggable="false">
+
+    <!-- DARK OVERLAY -->
+    <div class="overlay"></div>
+
+    <!-- MAIN COPY -->
+    <div class="copy" id="copy">
+      <small>A STUDY OF CHANGE</small>
+      <h1>EVOLVE<span class="period">.</span></h1>
+      <p>
+        제품은 완성된 모습으로 시작되지 않는다.<br>
+        형태와 구조는 시간에 따라 계속 달라진다.
+      </p>
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="side" id="side">
+      <div class="n">01 / 03</div>
+      <h2 id="sideTitle">FORM<br>CHANGES.</h2>
+      <p id="sideText">익숙한 제품도 처음부터 지금의 모습이었던 것은 아니다.</p>
+    </div>
+
+    <!-- SCROLL BAR -->
+    <div class="bar">
+      <i id="bar"></i>
+    </div>
+
+    <!-- BLACK FADE -->
+    <div class="black" id="black"></div>
+
+  </div>
+
+</section>
+
+
+<!-- ARCHIVE PRODUCT SECTION -->
+<section class="archive-section" id="archiveSection">
+
+  <main id="archive">
+    <section class="hero">
+      <h1>PRODUCTS<br>EVOLVE.</h1>
+      <p>하나의 제품을 선택하고, 그 안으로 들어간다.<br>겉으로 보이는 형태부터 내부를 이루는 구조까지.</p>
+    </section>
+
+    <section class="grid">
+      <article class="card" onclick="openDetail(1)">
+        <div class="video-wrap"><video autoplay muted loop playsinline src="videos/airpods_01.mp4"></video><div class="hint">OPEN PRODUCT ↗</div></div>
+        <div class="meta"><div><div class="title">AirPods </div><div class="desc">Product study / visual archive</div></div><div class="year">2016</div></div>
+      </article>
+
+      <article class="card" onclick="openDetail(2)">
+        <div class="video-wrap"><video autoplay muted loop playsinline src="videos/airpods_02.mp4"></video><div class="hint">OPEN PRODUCT ↗</div></div>
+        <div class="meta"><div><div class="title">AirPods 2</div><div class="desc">Product study / visual archive</div></div><div class="year">2019</div></div>
+      </article>
+
+      <article class="card" onclick="openDetail(3)">
+        <div class="video-wrap"><video autoplay muted loop playsinline src="videos/airpods_03.mp4"></video><div class="hint">OPEN PRODUCT ↗</div></div>
+        <div class="meta"><div><div class="title">AirPods 3</div><div class="desc">Product study / visual archive</div></div><div class="year">2021</div></div>
+      </article>
+
+      <article class="card" onclick="openDetail(4)">
+        <div class="video-wrap"><video autoplay muted loop playsinline src="videos/airpods_04.mp4"></video><div class="hint">OPEN PRODUCT ↗</div></div>
+        <div class="meta"><div><div class="title">AirPods Pro</div><div class="desc">Product study / visual archive</div></div><div class="year">2019</div></div>
+      </article>
+
+      <article class="card" onclick="openDetail(5)">
+        <div class="video-wrap"><video autoplay muted loop playsinline src="videos/airpods_05.mp4"></video><div class="hint">OPEN PRODUCT ↗</div></div>
+        <div class="meta"><div><div class="title">AirPods Pro 2</div><div class="desc">Product study / visual archive</div></div><div class="year">2022</div></div>
+      </article>
+
+      <article class="card" onclick="openDetail(6)">
+        <div class="video-wrap"><video autoplay muted loop playsinline src="videos/airpods_06.mp4"></video><div class="hint">OPEN PRODUCT ↗</div></div>
+        <div class="meta"><div><div class="title">AirPods 4</div><div class="desc">Product study / visual archive</div></div><div class="year">2024</div></div>
+      </article>
+    </section>
+  </main>
+
+</section>
+
+
+<!-- DETAIL MODAL/SECTION -->
+<section id="detail">
+  <div class="detail-head">
+    <div>
+      <button class="back" id="backToProducts" type="button">← ALL PRODUCTS</button>
+      <h1 class="detail-title" id="detailTitle">AirPods</h1>
+    </div>
+
+    <div class="detail-meta">
+      <span class="detail-index" id="detailIndex">01 / 06</span>
+      <span class="detail-year" id="detailYear">2016</span>
+    </div>
+  </div>
+
+  <div class="stage">
+    <model-viewer
+      id="productModel"
+      src="models/airpots.glb"
+      camera-controls
+      touch-action="pan-y"
+      shadow-intensity="1"
+      exposure="1.05"
+      environment-image="neutral"
+      interaction-prompt="none"
+      alt="Interactive 3D product model">
+    </model-viewer>
+    <div class="click" id="stageClickHint">CLICK MODEL TO PLAY ANIMATION · DRAG TO ROTATE</div>
+  </div>
+
+  <div class="detail-nav">
+    <button class="detail-arrow" type="button" onclick="changeProduct(-1)" aria-label="Previous product">←</button>
+
+    <div class="timeline" id="timeline">
+      <div class="timeline-item"><button class="timeline-btn" type="button" data-product="0" onclick="selectProduct(0)">2016</button></div>
+      <div class="timeline-item"><button class="timeline-btn" type="button" data-product="1" onclick="selectProduct(1)">2019</button></div>
+      <div class="timeline-item"><button class="timeline-btn" type="button" data-product="2" onclick="selectProduct(2)">2019</button></div>
+      <div class="timeline-item"><button class="timeline-btn" type="button" data-product="3" onclick="selectProduct(3)">2021</button></div>
+      <div class="timeline-item"><button class="timeline-btn" type="button" data-product="4" onclick="selectProduct(4)">2022</button></div>
+      <div class="timeline-item"><button class="timeline-btn" type="button" data-product="5" onclick="selectProduct(5)">2024</button></div>
+    </div>
+
+    <button class="detail-arrow" type="button" onclick="changeProduct(1)" aria-label="Next product">→</button>
+  </div>
+</section>
+
+
+<!-- EXPLODE MODAL -->
+<section id="explode">
+  <div class="explode-head">
+    <div class="explode-title" id="explodeTitle">AIRPODS / DISASSEMBLY</div>
+    <div class="close" onclick="closeExplode()">CLOSE ×</div>
+  </div>
+
+  <div class="explode-stage">
+    <model-viewer src="models/airpods_exploded.glb" camera-controls touch-action="pan-y" camera-orbit="0deg 72deg 105%" exposure="1.1" shadow-intensity="0.7" environment-image="neutral"></model-viewer>
+  </div>
+
+  <div class="explode-labels">
+    <span>01 / OUTER SHELL</span>
+    <span>02 / SPEAKER</span>
+    <span>03 / BATTERY</span>
+    <span>04 / CIRCUIT</span>
+  </div>
+</section>
+
+
+<script>
+
+function goHome() {
+  closeDetail();
+  closeExplode();
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+}
+
+function goToArchive() {
+  const detail = document.getElementById('detail');
+  const explode = document.getElementById('explode');
+  const archive = document.getElementById('archiveSection');
+
+  if (detail) detail.style.display = 'none';
+  if (explode) explode.style.display = 'none';
+
+  if (archive) {
+    const y = archive.getBoundingClientRect().top + window.pageYOffset;
+    window.scrollTo(0, y);
+  }
+}
+
+
+
+(() => {
+
+  const FRAME_COUNT = 147;
+
+  const intro = document.getElementById("intro");
+  const frame = document.getElementById("frame");
+  const copy = document.getElementById("copy");
+  const side = document.getElementById("side");
+  const title = document.getElementById("sideTitle");
+  const text = document.getElementById("sideText");
+  const black = document.getElementById("black");
+  const bar = document.getElementById("bar");
+
+
+  /* CUSTOM CURSOR SCRIPT */
+  const cursorDot = document.getElementById("cursorDot");
+  const cursorCircle = document.getElementById("cursorCircle");
+
+  let mouseX = -100;
+  let mouseY = -100;
+  let circleX = -100;
+  let circleY = -100;
+
+  window.addEventListener("mousemove", (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+
+    cursorDot.style.left = `${mouseX}px`;
+    cursorDot.style.top = `${mouseY}px`;
+  }, { passive: true });
+
+  function updateCursor() {
+    circleX += (mouseX - circleX) * 0.15;
+    circleY += (mouseY - circleY) * 0.15;
+
+    cursorCircle.style.left = `${circleX}px`;
+    cursorCircle.style.top = `${circleY}px`;
+
+    requestAnimationFrame(updateCursor);
+  }
+  requestAnimationFrame(updateCursor);
+
+  function bindHoverEvents() {
+    const hoverTargets = document.querySelectorAll('.logo, .info, .copy, .side, .card, .back, .close, .stage');
+    hoverTargets.forEach((target) => {
+      target.addEventListener('mouseenter', () => {
+        document.body.classList.add('cursor-hover');
+      });
+      target.addEventListener('mouseleave', () => {
+        document.body.classList.remove('cursor-hover');
+      });
+    });
+  }
+  bindHoverEvents();
+
+
+  /* SIDE TEXT DATA */
+  const data = [
+    [
+      "FORM<br>CHANGES.",
+      "익숙한 제품도 처음부터 지금의 모습이었던 것은 아니다."
+    ],
+    [
+      "TECHNOLOGY<br>CHANGES.",
+      "작은 부품과 기술의 변화가 제품의 형태와 사용 방식을 바꾼다."
+    ],
+    [
+      "PRODUCTS<br>EVOLVE.",
+      "변화가 쌓여 지금 우리가 사용하는 하나의 제품이 만들어진다."
+    ]
+  ];
+
+
+  /* IMAGE PRELOAD */
+  const images = [];
+  let shown = -1;
+  let raf = 0;
+
+  for (let i = 0; i < FRAME_COUNT; i++) {
+    const img = new Image();
+    img.decoding = "async";
+    const fileName = "frame_" + String(i).padStart(5, "0") + ".png";
+    img.src = "frames/" + fileName;
+    images.push(img);
+  }
+
+
+  /* CLAMP */
+  function clamp(value) {
+    return Math.max(0, Math.min(1, value));
+  }
+
+
+  /* RENDER INTRO */
+  function render() {
+    const max = Math.max(1, intro.offsetHeight - window.innerHeight);
+    const progress = clamp(-intro.getBoundingClientRect().top / max);
+
+    /* SCROLL → FRAME */
+    const target = Math.round(progress * (FRAME_COUNT - 1));
+
+    if (target !== shown && images[target] && images[target].complete) {
+      frame.src = images[target].src;
+      shown = target;
+    }
+
+    /* MAIN COPY */
+    const p = clamp(progress / 0.82);
+    copy.style.transform = `translateY(calc(-50% - ${p * 90}px))`;
+    copy.style.opacity = String(1 - clamp((progress - 0.05) / 0.24));
+
+    /* SIDE TEXT & MOTION */
+    if (progress < 0.02) {
+      side.style.opacity = "0";
+    } else {
+      let index;
+      if (progress < 0.34) index = 0;
+      else if (progress < 0.66) index = 1;
+      else index = 2;
+
+      title.innerHTML = data[index][0];
+      text.textContent = data[index][1];
+
+      let local;
+      if (index === 0) local = (progress - 0.02) / 0.32;
+      else if (index === 1) local = (progress - 0.34) / 0.32;
+      else local = (progress - 0.66) / 0.34;
+
+      local = Math.min(1, Math.max(0, local));
+
+      side.style.opacity = String(0.2 + 0.8 * Math.sin(local * Math.PI / 2));
+      side.style.transform = `translateY(calc(-50% + ${(1 - local) * 18}px))`;
+    }
+
+    /* PROGRESS BAR */
+    bar.style.height = `${progress * 100}%`;
+
+    /* BLACK FADE */
+    black.style.opacity = String(clamp((progress - 0.82) / 0.18));
+
+    raf = 0;
+  }
+
+  function requestRender() {
+    if (!raf) {
+      raf = requestAnimationFrame(render);
+    }
+  }
+
+  window.addEventListener("scroll", requestRender, { passive: true });
+  window.addEventListener("resize", requestRender);
+  requestRender();
+
+})();
+
+
+const backToProducts = document.getElementById('backToProducts');
+if (backToProducts) {
+  backToProducts.addEventListener('click', (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    goToArchive();
+  });
+}
+
+/* PRODUCTS DETAIL & EXPLORE LOGIC */
+const products = [
+  { name: "AirPods", year: "2016", modelSrc: "models/airpots.glb" },
+  { name: "AirPods 2", year: "2019", modelSrc: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/main/Models/CarConcept/GLB/CarConcept.glb" },
+  { name: "AirPods Pro", year: "2019", modelSrc: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/main/Models/CarConcept/GLB/CarConcept.glb" },
+  { name: "AirPods 3", year: "2021", modelSrc: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/main/Models/CarConcept/GLB/CarConcept.glb" },
+  { name: "AirPods Pro 2", year: "2022", modelSrc: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/main/Models/CarConcept/GLB/CarConcept.glb" },
+  { name: "AirPods 4", year: "2024", modelSrc: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/main/Models/CarConcept/GLB/CarConcept.glb" }
+];
+
+let currentProduct = 0;
+
+function openDetail(i) {
+  const archiveToTimeline = [0, 1, 3, 2, 4, 5];
+  selectProduct(archiveToTimeline[i - 1] ?? 0);
+  document.getElementById('detail').style.display = 'block';
+  document.getElementById('detail').scrollTo(0, 0);
+}
+
+function selectProduct(index) {
+  currentProduct = Math.max(0, Math.min(products.length - 1, index));
+
+  const product = products[currentProduct];
+  document.getElementById('detailTitle').textContent = product.name;
+  document.getElementById('detailYear').textContent = product.year;
+  document.getElementById('detailIndex').textContent = String(currentProduct + 1).padStart(2, '0') + ' / 06';
+
+  const model = document.getElementById('productModel');
+  const hint = document.getElementById('stageClickHint');
+
+  // 이전 등록된 타이머 및 이벤트 완전 정지
+  if (model._cleanUp) {
+    model._cleanUp();
+  }
+
+  model.src = product.modelSrc;
+  
+  // 핵심 1: 초점(camera-target)을 위로 5cm 올리고 FOV를 키워서 상단 잘림 원천 방지
+  model.cameraTarget = '0m 0.05m 0m';
+  model.cameraOrbit = '0deg 75deg 200%';
+  model.fieldOfView = '35deg';
+
+  if (currentProduct === 0) {
+    model.autoRotate = false;
+    hint.textContent = "CLICK MODEL TO PLAY ANIMATION · DRAG TO ROTATE";
+
+    let isMouseDown = false;
+    let startX = 0, startY = 0;
+    let hasPlayed = false;
+
+    const setupAnimation = () => {
+      const names = model.availableAnimations;
+      if (names && names.length > 0) {
+        model.animationName = names[0];
+      }
+
+      // 첫 프레임(0초)에 완전 멈춤
+      model.pause();
+      model.currentTime = 0;
+
+      // Three.js 내부 액션에 무한 루프 금지 설정 적용
+      const symbol = Object.getOwnPropertySymbols(model).find(s => s.description === 'scene');
+      if (symbol && model[symbol]) {
+        const mixer = model[symbol].mixer;
+        if (mixer) {
+          mixer._actions.forEach(action => {
+            action.setLoop(1, 1); // LoopOnce (1번만 재생)
+            action.clampWhenFinished = true; // 완료 후 마지막 프레임 고정
+          });
+        }
+      }
+
+      const onMouseDown = (e) => {
+        isMouseDown = true;
+        startX = e.clientX;
+        startY = e.clientY;
+      };
+
+      const onMouseUp = (e) => {
+        if (!isMouseDown) return;
+        isMouseDown = false;
+
+        const dist = Math.hypot(e.clientX - startX, e.clientY - startY);
+        // 회전 드래그가 아닌 순수 클릭 시 1회만 재생
+        if (dist < 5 && !hasPlayed) {
+          hasPlayed = true;
+          model.currentTime = 0;
+          // repetitions: 1 옵션을 줘서 끝난 후 절대 반복되지 않게 함
+          model.play({ repetitions: 1 });
+        }
+      };
+
+      // 애니메이션이 끝나면 자동으로 실행되는 finished 이벤트 핸들러
+      const onFinished = () => {
+        model.pause();
+        if (model.duration) {
+          model.currentTime = model.duration; // 마지막 프레임에 고정
+        }
+      };
+
+      model.addEventListener('mousedown', onMouseDown);
+      model.addEventListener('mouseup', onMouseUp);
+      model.addEventListener('finished', onFinished);
+
+      model._cleanUp = () => {
+        model.removeEventListener('mousedown', onMouseDown);
+        model.removeEventListener('mouseup', onMouseUp);
+        model.removeEventListener('finished', onFinished);
+      };
+    };
+
+    if (model.loaded) {
+      setupAnimation();
+    } else {
+      model.addEventListener('load', setupAnimation, { once: true });
+    }
+
+  } else {
+    model.cameraTarget = 'auto';
+    model.autoRotate = true;
+    hint.textContent = "DRAG TO ROTATE · SCROLL TO ZOOM";
+  }
+
+  document.querySelectorAll('.timeline-btn').forEach((button) => {
+    button.classList.toggle('active', Number(button.dataset.product) === currentProduct);
+  });
+}
+
+function changeProduct(direction) {
+  let next = currentProduct + direction;
+  if (next < 0) next = products.length - 1;
+  if (next >= products.length) next = 0;
+  selectProduct(next);
+}
+
+function closeDetail() {
+  document.getElementById('detail').style.display = 'none';
+}
+
+function openExplode() {
+  /* 분해 화면 예시 */
+}
+
+function closeExplode() {
+  document.getElementById('explode').style.display = 'none';
+}
+
+</script>
+
+</body>
+</html>
