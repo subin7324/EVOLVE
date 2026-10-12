@@ -27,14 +27,11 @@ body {
 
 body {
   overflow-x: hidden;
-  cursor: none; /* 기본 커서 숨김 */
+  cursor: none;
 }
 
 
-/* =========================================
-   CUSTOM CURSOR
-========================================= */
-
+/* CUSTOM CURSOR */
 .cursor-dot {
   position: fixed;
   top: 0;
@@ -63,7 +60,6 @@ body {
   transition: width 0.3s ease, height 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
 }
 
-/* 요소 호버 시 커서 변화 */
 body.cursor-hover .cursor-circle {
   width: 56px;
   height: 56px;
@@ -76,10 +72,7 @@ body.cursor-hover .cursor-dot {
 }
 
 
-/* =========================================
-   GLOBAL PERSISTENT HEADER & TOP INFO
-========================================= */
-
+/* GLOBAL PERSISTENT HEADER & TOP INFO */
 .header {
   position: fixed;
   z-index: 9999;
@@ -114,10 +107,7 @@ body.cursor-hover .cursor-dot {
 }
 
 
-/* =========================================
-   INTRO
-========================================= */
-
+/* INTRO */
 .intro {
   height: 520vh;
   position: relative;
@@ -132,11 +122,6 @@ body.cursor-hover .cursor-dot {
   background: #000;
 }
 
-
-/* =========================================
-   FRAME
-========================================= */
-
 #frame {
   position: absolute;
   inset: 0;
@@ -146,22 +131,12 @@ body.cursor-hover .cursor-dot {
   display: block;
 }
 
-
-/* =========================================
-   DARK OVERLAY
-========================================= */
-
 .overlay {
   position: absolute;
   inset: 0;
   pointer-events: none;
   background: rgba(0, 0, 0, 0.79);
 }
-
-
-/* =========================================
-   MAIN COPY
-========================================= */
 
 .copy {
   position: absolute;
@@ -206,11 +181,6 @@ body.cursor-hover .cursor-dot {
   color: #ddd;
 }
 
-
-/* =========================================
-   RIGHT SIDE COPY
-========================================= */
-
 .side {
   position: absolute;
   z-index: 3;
@@ -248,11 +218,6 @@ body.cursor-hover .cursor-dot {
   max-width: 290px;
 }
 
-
-/* =========================================
-   SCROLL BAR
-========================================= */
-
 .bar {
   position: absolute;
   z-index: 4;
@@ -271,11 +236,6 @@ body.cursor-hover .cursor-dot {
   background: #fff;
 }
 
-
-/* =========================================
-   BLACK FADE
-========================================= */
-
 .black {
   position: absolute;
   z-index: 5;
@@ -286,10 +246,7 @@ body.cursor-hover .cursor-dot {
 }
 
 
-/* =========================================
-   ARCHIVE MAIN SECTION
-========================================= */
-
+/* ARCHIVE MAIN SECTION */
 .archive-section {
   position: relative;
   z-index: 10;
@@ -316,11 +273,6 @@ body.cursor-hover .cursor-dot {
   color: #aaa;
   max-width: 440px;
 }
-
-
-/* =========================================
-   3D STACKED GRID
-========================================= */
 
 .grid {
   padding: 40px 10vw 200px;
@@ -409,10 +361,7 @@ body.cursor-hover .cursor-dot {
 }
 
 
-/* =========================================
-   PRODUCT DETAIL
-========================================= */
-
+/* PRODUCT DETAIL */
 #detail {
   display: none;
   position: fixed;
@@ -424,11 +373,11 @@ body.cursor-hover .cursor-dot {
 
 .detail-head {
   position: absolute;
-  z-index: 1000;
+  z-index: 10;
   top: 0;
   left: 0;
   right: 0;
-  padding: 104px 5vw 0;
+  padding: 60px 5vw 0;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -441,7 +390,7 @@ body.cursor-hover .cursor-dot {
 
 .back {
   position: relative;
-  z-index: 1001;
+  z-index: 11;
   display: inline-flex;
   align-items: center;
   width: fit-content;
@@ -453,7 +402,6 @@ body.cursor-hover .cursor-dot {
   outline: 0;
   background: transparent;
   appearance: none;
-  -webkit-appearance: none;
   font: inherit;
   font-size: 11px;
   letter-spacing: .08em;
@@ -497,14 +445,38 @@ body.cursor-hover .cursor-dot {
   color: #aaa;
 }
 
+.purchase-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 26px;
+  padding: 11px 16px;
+  border: 1px solid rgba(255,255,255,.48);
+  color: #fff;
+  background: rgba(5,5,5,.55);
+  text-decoration: none;
+  font-size: 11px;
+  letter-spacing: .08em;
+  white-space: nowrap;
+  transition: color .25s ease, background .25s ease, border-color .25s ease;
+  pointer-events: auto;
+}
+.purchase-link:hover {
+  color: #050505;
+  background: #fff;
+  border-color: #fff;
+}
+
 .stage {
   position: absolute;
-  inset: 70px 0 104px;
+  inset: 0;
+  z-index: 1;
   display: grid;
   place-items: center;
   background:
     radial-gradient(circle at 50% 48%, rgba(255,255,255,.055), transparent 38%),
     linear-gradient(180deg, #080808 0%, #101010 100%);
+  overflow: visible;
 }
 
 .stage::before {
@@ -520,9 +492,9 @@ body.cursor-hover .cursor-dot {
 .stage model-viewer {
   position: absolute;
   inset: 0;
-  display: block;
   width: 100%;
   height: 100%;
+  display: block;
   pointer-events: auto;
   --poster-color: transparent;
   --progress-bar-color: #fff;
@@ -533,18 +505,19 @@ body.cursor-hover .cursor-dot {
 .stage .click {
   position: absolute;
   left: 50%;
-  bottom: 22px;
+  bottom: 85px;
   transform: translateX(-50%);
   font-size: 10px;
   letter-spacing: .16em;
   color: #666;
   white-space: nowrap;
   pointer-events: none;
+  z-index: 10;
 }
 
 .detail-nav {
   position: absolute;
-  z-index: 5;
+  z-index: 10;
   left: 5vw;
   right: 5vw;
   bottom: 25px;
@@ -627,10 +600,79 @@ body.cursor-hover .cursor-dot {
   background: #fff;
 }
 
-/* =========================================
-   EXPLODE
-========================================= */
 
+/* AIRPODS PART CALLOUTS */
+.airpods-callouts {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .65s ease, visibility .65s ease;
+}
+.airpods-callouts.visible {
+  opacity: 1;
+  visibility: visible;
+}
+.airpods-callouts .callout {
+  position: absolute;
+  width: clamp(150px, 16vw, 225px);
+  color: rgba(236,255,252,.94);
+  text-shadow: 0 0 12px rgba(105,255,235,.18);
+  font-family: Arial, Helvetica, sans-serif;
+}
+.airpods-callouts .callout .part-no {
+  display: block;
+  margin-bottom: 7px;
+  font-size: 9px;
+  letter-spacing: .2em;
+  color: #8fffea;
+}
+.airpods-callouts .callout strong {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: .1em;
+}
+.airpods-callouts .callout p {
+  margin: 0;
+  max-width: 210px;
+  font-size: 11px;
+  line-height: 1.65;
+  color: rgba(220,244,241,.68);
+}
+
+.airpods-callouts .callout::after,
+.airpods-callouts .callout::before {
+  display: none;
+}
+.airpods-callouts .connector-map {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+.airpods-callouts .connector-map path {
+  fill: none;
+  stroke: rgba(143,255,234,.82);
+  stroke-width: .11;
+  vector-effect: non-scaling-stroke;
+  filter: drop-shadow(0 0 2px rgba(113,255,235,.45));
+}
+.airpods-callouts .connector-map circle {
+  fill: #c8fff7;
+  filter: drop-shadow(0 0 3px rgba(113,255,235,.95));
+}
+.airpods-callouts .earbuds { left: 5%; top: 34%; }
+.airpods-callouts .eartip { left: 5%; top: 44%; }
+.airpods-callouts .case { right: 5%; top: 55%; text-align: left; }
+.airpods-callouts .hinge { left: 9%; top: 66%; }
+
+/* EXPLODE */
 #explode {
   display: none;
   position: fixed;
@@ -647,21 +689,10 @@ body.cursor-hover .cursor-dot {
 .explode-labels { position: absolute; left: 34px; bottom: 32px; display: grid; gap: 8px; font-size: 11px; color: #aaa; }
 .explode-labels span { padding: 7px 9px; background: rgba(20,20,20,.8); border: 1px solid #333; color: #eee; backdrop-filter: blur(8px); }
 
-/* =========================================
-   MOBILE
-========================================= */
-
+/* MOBILE */
 @media (max-width: 768px) {
-
-  body {
-    cursor: auto;
-  }
-
-  .cursor-dot,
-  .cursor-circle {
-    display: none;
-  }
-
+  body { cursor: auto; }
+  .cursor-dot, .cursor-circle { display: none; }
   .header { left: 20px; top: 20px; }
   .logo { font-size: 22px; }
   .top-info { right: 34px; top: 28px; font-size: 9px; }
@@ -674,31 +705,23 @@ body.cursor-hover .cursor-dot {
   .side h2 { font-size: 34px; }
   .side p { font-size: 11px; }
   .bar { right: 20px; }
-
   .grid { padding: 20px 4vw 120px; }
   .card:not(:first-child) { margin-top: -60px; }
   .card:nth-child(odd), .card:nth-child(even) { transform: rotate(0deg) translateX(0) !important; }
   .detail-head { padding: 88px 20px 0; }
   .detail-title { font-size: 17vw; }
   .detail-meta { padding-top: 30px; }
-  .stage { inset: 105px 0 94px; }
+  .stage { inset: 0; }
   .stage::before { width: 82vw; height: 82vw; }
   .stage model-viewer {
-  position: absolute;
-  inset: 0;
-  display: block;
-  width: 100%;
-  height: 100%;
-  pointer-events: auto;
-  --poster-color: transparent;
-  --progress-bar-color: #fff;
-  --progress-mask: #111;
-  filter: drop-shadow(0 35px 45px rgba(0,0,0,.55));
-}
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
   .detail-nav { left: 20px; right: 20px; bottom: 18px; }
   .timeline { margin: 0 8px; }
   .timeline-btn { width: 38px; }
-
 }
 
 </style>
@@ -719,24 +742,15 @@ body.cursor-hover .cursor-dot {
   INTERACTIVE 3D EXPERIENCE
 </div>
 
-
-<!-- CUSTOM CURSOR -->
 <div class="cursor-dot" id="cursorDot"></div>
 <div class="cursor-circle" id="cursorCircle"></div>
 
-
 <!-- INTRO SECTION -->
 <section class="intro" id="intro">
-
   <div class="sticky">
-
-    <!-- FRAME -->
     <img id="frame" src="frames/frame_00000.png" alt="" draggable="false">
-
-    <!-- DARK OVERLAY -->
     <div class="overlay"></div>
 
-    <!-- MAIN COPY -->
     <div class="copy" id="copy">
       <small>A STUDY OF CHANGE</small>
       <h1>EVOLVE<span class="period">.</span></h1>
@@ -746,29 +760,19 @@ body.cursor-hover .cursor-dot {
       </p>
     </div>
 
-    <!-- RIGHT SIDE -->
     <div class="side" id="side">
       <div class="n">01 / 03</div>
       <h2 id="sideTitle">FORM<br>CHANGES.</h2>
       <p id="sideText">익숙한 제품도 처음부터 지금의 모습이었던 것은 아니다.</p>
     </div>
 
-    <!-- SCROLL BAR -->
-    <div class="bar">
-      <i id="bar"></i>
-    </div>
-
-    <!-- BLACK FADE -->
+    <div class="bar"><i id="bar"></i></div>
     <div class="black" id="black"></div>
-
   </div>
-
 </section>
-
 
 <!-- ARCHIVE PRODUCT SECTION -->
 <section class="archive-section" id="archiveSection">
-
   <main id="archive">
     <section class="hero">
       <h1>PRODUCTS<br>EVOLVE.</h1>
@@ -807,9 +811,7 @@ body.cursor-hover .cursor-dot {
       </article>
     </section>
   </main>
-
 </section>
-
 
 <!-- DETAIL MODAL/SECTION -->
 <section id="detail">
@@ -817,6 +819,7 @@ body.cursor-hover .cursor-dot {
     <div>
       <button class="back" id="backToProducts" type="button">← ALL PRODUCTS</button>
       <h1 class="detail-title" id="detailTitle">AirPods</h1>
+      <a class="purchase-link" href="https://www.apple.com/kr/airpods-pro/" target="_blank" rel="noopener noreferrer">구매하기 ↗</a>
     </div>
 
     <div class="detail-meta">
@@ -826,17 +829,54 @@ body.cursor-hover .cursor-dot {
   </div>
 
   <div class="stage">
+    <!-- 시작 위치를 참고 화면에 맞춰 왼쪽 위로 조정 -->
     <model-viewer
       id="productModel"
       src="models/airpots.glb"
       camera-controls
       touch-action="pan-y"
+      camera-target="1.4m 0.6m 0m"
+      camera-orbit="0deg 75deg 2.6m"
+      field-of-view="30deg"
       shadow-intensity="1"
       exposure="1.05"
       environment-image="neutral"
       interaction-prompt="none"
       alt="Interactive 3D product model">
     </model-viewer>
+
+    <div class="airpods-callouts" id="airpodsCallouts" aria-hidden="true">
+      <svg class="connector-map" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M 19 35 L 34 35 L 42.5 42.5" />
+        <circle cx="42.5" cy="42.5" r=".22" />
+        <path d="M 81 55 L 67 55 L 58 68" />
+        <circle cx="58" cy="68" r=".22" />
+        <path d="M 23 67 L 36 67 L 48 58" />
+        <circle cx="48" cy="58" r=".22" />
+        <path d="M 19 44 L 33 44 L 39 39" />
+        <circle cx="39" cy="39" r=".22" />
+      </svg>
+      <div class="callout earbuds">
+        <span class="part-no">01 / ACOUSTIC UNIT</span>
+        <strong>이어버드</strong>
+        <p>귀에 착용해 소리를 재생하고 마이크로 주변 소리를 감지한다.</p>
+      </div>
+      <div class="callout eartip">
+        <span class="part-no">02 / SILICONE EAR TIP</span>
+        <strong>이어팁</strong>
+        <p>귀 안쪽에 밀착되어 착용감을 높이고 외부 소음을 차단하는 실리콘 부품.</p>
+      </div>
+      <div class="callout case">
+        <span class="part-no">03 / CHARGING CASE</span>
+        <strong>충전 케이스</strong>
+        <p>이어버드를 보관하고 이동 중 배터리를 충전하는 케이스.</p>
+      </div>
+      <div class="callout hinge">
+        <span class="part-no">04 / HINGE & CONTACT</span>
+        <strong>힌지 · 충전 접점</strong>
+        <p>케이스 뚜껑의 회전을 지지하는 힌지와 충전을 위한 접점 부위.</p>
+      </div>
+    </div>
     <div class="click" id="stageClickHint">CLICK MODEL TO PLAY ANIMATION · DRAG TO ROTATE</div>
   </div>
 
@@ -856,7 +896,6 @@ body.cursor-hover .cursor-dot {
   </div>
 </section>
 
-
 <!-- EXPLODE MODAL -->
 <section id="explode">
   <div class="explode-head">
@@ -875,7 +914,6 @@ body.cursor-hover .cursor-dot {
     <span>04 / CIRCUIT</span>
   </div>
 </section>
-
 
 <script>
 
@@ -902,12 +940,8 @@ function goToArchive() {
   }
 }
 
-
-
 (() => {
-
   const FRAME_COUNT = 147;
-
   const intro = document.getElementById("intro");
   const frame = document.getElementById("frame");
   const copy = document.getElementById("copy");
@@ -917,8 +951,6 @@ function goToArchive() {
   const black = document.getElementById("black");
   const bar = document.getElementById("bar");
 
-
-  /* CUSTOM CURSOR SCRIPT */
   const cursorDot = document.getElementById("cursorDot");
   const cursorCircle = document.getElementById("cursorCircle");
 
@@ -930,7 +962,6 @@ function goToArchive() {
   window.addEventListener("mousemove", (e) => {
     mouseX = e.clientX;
     mouseY = e.clientY;
-
     cursorDot.style.left = `${mouseX}px`;
     cursorDot.style.top = `${mouseY}px`;
   }, { passive: true });
@@ -938,10 +969,8 @@ function goToArchive() {
   function updateCursor() {
     circleX += (mouseX - circleX) * 0.15;
     circleY += (mouseY - circleY) * 0.15;
-
     cursorCircle.style.left = `${circleX}px`;
     cursorCircle.style.top = `${circleY}px`;
-
     requestAnimationFrame(updateCursor);
   }
   requestAnimationFrame(updateCursor);
@@ -949,60 +978,33 @@ function goToArchive() {
   function bindHoverEvents() {
     const hoverTargets = document.querySelectorAll('.logo, .info, .copy, .side, .card, .back, .close, .stage');
     hoverTargets.forEach((target) => {
-      target.addEventListener('mouseenter', () => {
-        document.body.classList.add('cursor-hover');
-      });
-      target.addEventListener('mouseleave', () => {
-        document.body.classList.remove('cursor-hover');
-      });
+      target.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+      target.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
     });
   }
   bindHoverEvents();
 
-
-  /* SIDE TEXT DATA */
   const data = [
-    [
-      "FORM<br>CHANGES.",
-      "익숙한 제품도 처음부터 지금의 모습이었던 것은 아니다."
-    ],
-    [
-      "TECHNOLOGY<br>CHANGES.",
-      "작은 부품과 기술의 변화가 제품의 형태와 사용 방식을 바꾼다."
-    ],
-    [
-      "PRODUCTS<br>EVOLVE.",
-      "변화가 쌓여 지금 우리가 사용하는 하나의 제품이 만들어진다."
-    ]
+    ["FORM<br>CHANGES.", "익숙한 제품도 처음부터 지금의 모습이었던 것은 아니다."],
+    ["TECHNOLOGY<br>CHANGES.", "작은 부품과 기술의 변화가 제품의 형태와 사용 방식을 바꾼다."],
+    ["PRODUCTS<br>EVOLVE.", "변화가 쌓여 지금 우리가 사용하는 하나의 제품이 만들어진다."]
   ];
 
-
-  /* IMAGE PRELOAD */
   const images = [];
-  let shown = -1;
-  let raf = 0;
+  let shown = -1, raf = 0;
 
   for (let i = 0; i < FRAME_COUNT; i++) {
     const img = new Image();
     img.decoding = "async";
-    const fileName = "frame_" + String(i).padStart(5, "0") + ".png";
-    img.src = "frames/" + fileName;
+    img.src = "frames/frame_" + String(i).padStart(5, "0") + ".png";
     images.push(img);
   }
 
+  function clamp(value) { return Math.max(0, Math.min(1, value)); }
 
-  /* CLAMP */
-  function clamp(value) {
-    return Math.max(0, Math.min(1, value));
-  }
-
-
-  /* RENDER INTRO */
   function render() {
     const max = Math.max(1, intro.offsetHeight - window.innerHeight);
     const progress = clamp(-intro.getBoundingClientRect().top / max);
-
-    /* SCROLL → FRAME */
     const target = Math.round(progress * (FRAME_COUNT - 1));
 
     if (target !== shown && images[target] && images[target].complete) {
@@ -1010,55 +1012,37 @@ function goToArchive() {
       shown = target;
     }
 
-    /* MAIN COPY */
     const p = clamp(progress / 0.82);
     copy.style.transform = `translateY(calc(-50% - ${p * 90}px))`;
     copy.style.opacity = String(1 - clamp((progress - 0.05) / 0.24));
 
-    /* SIDE TEXT & MOTION */
     if (progress < 0.02) {
       side.style.opacity = "0";
     } else {
-      let index;
-      if (progress < 0.34) index = 0;
-      else if (progress < 0.66) index = 1;
-      else index = 2;
-
+      let index = progress < 0.34 ? 0 : (progress < 0.66 ? 1 : 2);
       title.innerHTML = data[index][0];
       text.textContent = data[index][1];
 
-      let local;
-      if (index === 0) local = (progress - 0.02) / 0.32;
-      else if (index === 1) local = (progress - 0.34) / 0.32;
-      else local = (progress - 0.66) / 0.34;
-
+      let local = index === 0 ? (progress - 0.02) / 0.32 : (index === 1 ? (progress - 0.34) / 0.32 : (progress - 0.66) / 0.34);
       local = Math.min(1, Math.max(0, local));
 
       side.style.opacity = String(0.2 + 0.8 * Math.sin(local * Math.PI / 2));
       side.style.transform = `translateY(calc(-50% + ${(1 - local) * 18}px))`;
     }
 
-    /* PROGRESS BAR */
     bar.style.height = `${progress * 100}%`;
-
-    /* BLACK FADE */
     black.style.opacity = String(clamp((progress - 0.82) / 0.18));
-
     raf = 0;
   }
 
   function requestRender() {
-    if (!raf) {
-      raf = requestAnimationFrame(render);
-    }
+    if (!raf) raf = requestAnimationFrame(render);
   }
 
   window.addEventListener("scroll", requestRender, { passive: true });
   window.addEventListener("resize", requestRender);
   requestRender();
-
 })();
-
 
 const backToProducts = document.getElementById('backToProducts');
 if (backToProducts) {
@@ -1069,7 +1053,6 @@ if (backToProducts) {
   });
 }
 
-/* PRODUCTS DETAIL & EXPLORE LOGIC */
 const products = [
   { name: "AirPods", year: "2016", modelSrc: "models/airpots.glb" },
   { name: "AirPods 2", year: "2019", modelSrc: "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/main/Models/CarConcept/GLB/CarConcept.glb" },
@@ -1098,18 +1081,22 @@ function selectProduct(index) {
 
   const model = document.getElementById('productModel');
   const hint = document.getElementById('stageClickHint');
+  const callouts = document.getElementById('airpodsCallouts');
+  if (callouts) {
+    callouts.classList.remove('visible');
+    callouts.setAttribute('aria-hidden', 'true');
+  }
 
-  // 이전 등록된 타이머 및 이벤트 완전 정지
   if (model._cleanUp) {
     model._cleanUp();
   }
 
   model.src = product.modelSrc;
   
-  // 핵심 1: 초점(camera-target)을 위로 5cm 올리고 FOV를 키워서 상단 잘림 원천 방지
-  model.cameraTarget = '0m 0.05m 0m';
-  model.cameraOrbit = '0deg 75deg 200%';
-  model.fieldOfView = '35deg';
+  /* Y축 타겟을 높여 모델을 훨씬 더 아래로 이동 */
+  model.cameraTarget = '1.4m 0.6m 0m';
+  model.cameraOrbit = '0deg 75deg 2.6m';
+  model.fieldOfView = '30deg';
 
   if (currentProduct === 0) {
     model.autoRotate = false;
@@ -1125,18 +1112,16 @@ function selectProduct(index) {
         model.animationName = names[0];
       }
 
-      // 첫 프레임(0초)에 완전 멈춤
       model.pause();
       model.currentTime = 0;
 
-      // Three.js 내부 액션에 무한 루프 금지 설정 적용
       const symbol = Object.getOwnPropertySymbols(model).find(s => s.description === 'scene');
       if (symbol && model[symbol]) {
         const mixer = model[symbol].mixer;
         if (mixer) {
           mixer._actions.forEach(action => {
-            action.setLoop(1, 1); // LoopOnce (1번만 재생)
-            action.clampWhenFinished = true; // 완료 후 마지막 프레임 고정
+            action.setLoop(1, 1);
+            action.clampWhenFinished = true;
           });
         }
       }
@@ -1152,31 +1137,55 @@ function selectProduct(index) {
         isMouseDown = false;
 
         const dist = Math.hypot(e.clientX - startX, e.clientY - startY);
-        // 회전 드래그가 아닌 순수 클릭 시 1회만 재생
         if (dist < 5 && !hasPlayed) {
           hasPlayed = true;
+          finishedShown = false;
+          if (calloutTimer) { clearTimeout(calloutTimer); calloutTimer = null; }
           model.currentTime = 0;
-          // repetitions: 1 옵션을 줘서 끝난 후 절대 반복되지 않게 함
           model.play({ repetitions: 1 });
+          const durationMs = Number.isFinite(model.duration) && model.duration > 0
+            ? model.duration * 1000 : 5000;
+          calloutTimer = setTimeout(showCallouts, durationMs + 180);
         }
       };
 
-      // 애니메이션이 끝나면 자동으로 실행되는 finished 이벤트 핸들러
-      const onFinished = () => {
+      let calloutTimer = null;
+      let finishedShown = false;
+      const showCallouts = () => {
+        if (finishedShown) return;
+        finishedShown = true;
+        if (calloutTimer) { clearTimeout(calloutTimer); calloutTimer = null; }
         model.pause();
-        if (model.duration) {
-          model.currentTime = model.duration; // 마지막 프레임에 고정
+        if (Number.isFinite(model.duration) && model.duration > 0) {
+          model.currentTime = model.duration;
+        }
+        if (callouts) {
+          callouts.classList.add('visible');
+          callouts.setAttribute('aria-hidden', 'false');
+        }
+      };
+      const onFinished = () => showCallouts();
+
+      const hideCalloutsForRotation = () => {
+        if (callouts) {
+          callouts.classList.remove('visible');
+          callouts.setAttribute('aria-hidden', 'true');
         }
       };
 
+      model.addEventListener('pointerdown', hideCalloutsForRotation);
+      model.addEventListener('touchstart', hideCalloutsForRotation, { passive: true });
       model.addEventListener('mousedown', onMouseDown);
       model.addEventListener('mouseup', onMouseUp);
       model.addEventListener('finished', onFinished);
 
       model._cleanUp = () => {
+        if (calloutTimer) { clearTimeout(calloutTimer); calloutTimer = null; }
         model.removeEventListener('mousedown', onMouseDown);
         model.removeEventListener('mouseup', onMouseUp);
         model.removeEventListener('finished', onFinished);
+        model.removeEventListener('pointerdown', hideCalloutsForRotation);
+        model.removeEventListener('touchstart', hideCalloutsForRotation);
       };
     };
 
@@ -1187,7 +1196,6 @@ function selectProduct(index) {
     }
 
   } else {
-    model.cameraTarget = 'auto';
     model.autoRotate = true;
     hint.textContent = "DRAG TO ROTATE · SCROLL TO ZOOM";
   }
@@ -1208,10 +1216,7 @@ function closeDetail() {
   document.getElementById('detail').style.display = 'none';
 }
 
-function openExplode() {
-  /* 분해 화면 예시 */
-}
-
+function openExplode() {}
 function closeExplode() {
   document.getElementById('explode').style.display = 'none';
 }
