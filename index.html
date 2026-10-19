@@ -10,6 +10,13 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400&display=swap" rel="stylesheet">
 <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+<script>
+try {
+  document.documentElement.dataset.theme = localStorage.getItem('evolveTheme') === 'light' ? 'light' : 'dark';
+} catch (_) {
+  document.documentElement.dataset.theme = 'dark';
+}
+</script>
 
 <style>
 
@@ -28,6 +35,8 @@ body {
 body {
   overflow-x: hidden;
   cursor: none;
+  word-break: keep-all;
+  overflow-wrap: normal;
 }
 
 
@@ -78,6 +87,9 @@ body.cursor-hover .cursor-dot {
   z-index: 9999;
   left: 34px;
   top: 28px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
   font-family: "Bodoni Moda", "Times New Roman", serif;
   pointer-events: auto;
 }
@@ -88,6 +100,35 @@ body.cursor-hover .cursor-dot {
   letter-spacing: -.04em;
   cursor: pointer;
 }
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid #3b3b3b;
+  border-radius: 999px;
+  background: rgba(0,0,0,.78);
+  font-family: "Malgun Gothic", "맑은 고딕", sans-serif;
+}
+
+.theme-toggle button {
+  min-height: 28px;
+  padding: 5px 10px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: #aaa;
+  font: 11px "Malgun Gothic", "맑은 고딕", sans-serif;
+  cursor: pointer;
+}
+
+.theme-toggle button[aria-pressed="true"] {
+  background: #292929;
+  color: #fff;
+}
+
+.theme-toggle button:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
 
 .top-info {
   position: fixed;
@@ -203,7 +244,7 @@ body.cursor-hover .cursor-dot {
 .side h2 {
   margin: 0 0 22px;
   font-family: "Bodoni Moda", "Times New Roman", serif;
-  font-size: clamp(40px, 5vw, 68px);
+  font-size: clamp(34px, 4vw, 54px);
   font-weight: 400;
   line-height: .9;
   letter-spacing: -.055em;
@@ -711,7 +752,7 @@ body.cursor-hover .cursor-dot {
 @media (max-width: 768px) {
   body { cursor: auto; }
   .cursor-dot, .cursor-circle { display: none; }
-  .header { left: 20px; top: 20px; }
+  .header { left: 20px; top: 18px; flex-direction: column; align-items: flex-start; gap: 7px; }
   .logo { font-size: 22px; }
   .top-info { right: 34px; top: 28px; font-size: 9px; }
   .copy { left: 7%; width: 80vw; }
@@ -720,7 +761,8 @@ body.cursor-hover .cursor-dot {
   .copy p { font-size: 12px; }
   .side { right: 7%; width: 200px; }
   .side .n { font-size: 9px; }
-  .side h2 { font-size: 34px; }
+  .side h2 { font-size: clamp(28px, 4vw, 32px); }
+  .hero h1 { font-size: clamp(48px, 11vw, 84px); }
   .side p { font-size: 11px; }
   .bar { right: 20px; }
   .grid { padding: 20px 4vw 120px; }
@@ -728,6 +770,7 @@ body.cursor-hover .cursor-dot {
   .card:nth-child(odd), .card:nth-child(even) { transform: rotate(0deg) translateX(0) !important; }
   .detail-head { padding: 88px 20px 0; }
   .detail-title { font-size: 17vw; }
+
   .detail-meta { padding-top: 30px; }
   .stage { inset: 0; }
   .stage::before { width: 82vw; height: 82vw; }
@@ -742,6 +785,194 @@ body.cursor-hover .cursor-dot {
   .timeline-btn { width: 38px; }
 }
 
+body:has(#detail.airpods01-subpage-active) .header { top: 74px; }
+body:has(#detail.airpods01-subpage-active) .top-info { display: none; }
+@media (max-width: 768px) {
+  body:has(#detail.airpods01-subpage-active) .header { top: 108px; flex-direction: row; align-items: center; gap: 12px; }
+}
+
+/* LIGHT THEME */
+html { color-scheme: dark; }
+html[data-theme="light"], html[data-theme="light"] body { background: #f2f1ed; color: #171717; }
+html[data-theme="light"] { color-scheme: light; }
+html[data-theme="light"] .cursor-dot { background: #171717; }
+html[data-theme="light"] .cursor-circle { border-color: rgba(23,23,23,.45); }
+html[data-theme="light"] body.cursor-hover .cursor-circle { border-color: rgba(23,23,23,.75); background: rgba(23,23,23,.06); }
+html[data-theme="light"] body.cursor-hover .cursor-dot { background: #171717; }
+html[data-theme="light"] .theme-toggle { border-color: #c8c7c1; background: rgba(250,249,246,.94); }
+html[data-theme="light"] .theme-toggle button { color: #60605b; }
+html[data-theme="light"] .theme-toggle button[aria-pressed="true"] { background: #20201e; color: #fff; }
+html[data-theme="light"] .top-info { color: #64645f; }
+html[data-theme="light"] .sticky { background: #eeede8; }
+html[data-theme="light"] .overlay { background: rgba(245,244,239,.82); }
+html[data-theme="light"] .copy, html[data-theme="light"] .side { color: #171717; }
+html[data-theme="light"] .copy p, html[data-theme="light"] .side p { color: #4e4e49; }
+html[data-theme="light"] .side .n { color: #666660; }
+html[data-theme="light"] .bar { background: rgba(23,23,23,.25); }
+html[data-theme="light"] .bar i { background: #171717; }
+html[data-theme="light"] .black { background: #f2f1ed; }
+html[data-theme="light"] .archive-section { background: #f2f1ed; }
+html[data-theme="light"] .hero h1, html[data-theme="light"] .title { color: #171717; }
+html[data-theme="light"] .hero p, html[data-theme="light"] .desc { color: #5f5f59; }
+html[data-theme="light"] .year { color: #76766f; }
+html[data-theme="light"] .video-wrap { background: #deddd7; border-color: rgba(0,0,0,.12); box-shadow: 0 24px 48px rgba(0,0,0,.12); }
+html[data-theme="light"] .hint { background: rgba(250,249,246,.94); color: #222; border-color: #c8c7c1; }
+html[data-theme="light"] #detail, html[data-theme="light"] #explode { background: #f2f1ed; }
+html[data-theme="light"] .back { color: #62625d; }
+html[data-theme="light"] .back:hover { color: #111; }
+html[data-theme="light"] .detail-title, html[data-theme="light"] .explode-title { color: #171717; }
+html[data-theme="light"] .detail-index { color: #777770; }
+html[data-theme="light"] .detail-year, html[data-theme="light"] .close { color: #555550; }
+html[data-theme="light"] .purchase-link { color: #222; border-color: rgba(0,0,0,.35); background: rgba(255,255,255,.55); }
+html[data-theme="light"] .purchase-link:hover { color: #fff; border-color: #222; background: #222; }
+html[data-theme="light"] .stage { background: radial-gradient(circle at 50% 48%, rgba(255,255,255,.92), transparent 42%), linear-gradient(180deg,#e8e7e2 0%,#d9d8d2 100%); }
+html[data-theme="light"] .stage::before { border-color: rgba(0,0,0,.08); }
+html[data-theme="light"] .stage model-viewer { --progress-bar-color: #222; --progress-mask: #deddd7; filter: drop-shadow(0 30px 38px rgba(0,0,0,.22)); }
+html[data-theme="light"] .stage .click { color: #696963; }
+html[data-theme="light"] .detail-arrow { border-color: #c9c8c2; color: #555550; }
+html[data-theme="light"] .detail-arrow:hover { color: #111; border-color: #77766f; background: #e3e2dc; }
+html[data-theme="light"] .timeline::before { background: #c9c8c2; }
+html[data-theme="light"] .timeline-btn { background: #e7e6e0; color: #77766f; }
+html[data-theme="light"] .timeline-btn:hover, html[data-theme="light"] .timeline-btn.active { color: #171717; }
+html[data-theme="light"] .timeline-btn.active::before { background: #171717; }
+html[data-theme="light"] .airpods-callouts .callout { color: #174f49; text-shadow: none; }
+html[data-theme="light"] .airpods-callouts .callout .part-no { color: #27796f; }
+html[data-theme="light"] .airpods-callouts .callout p { color: #4d6965; }
+html[data-theme="light"] .airpods-callouts .connector-map path { stroke: rgba(39,121,111,.78); filter: none; }
+html[data-theme="light"] .airpods-callouts .connector-map circle { fill: #27796f; filter: none; }
+html[data-theme="light"] .explode-labels { color: #555550; }
+html[data-theme="light"] .explode-labels span { background: rgba(250,249,246,.9); border-color: #c8c7c1; color: #222; }
+html[data-theme="light"] #airpods01ModelPageNav button, html[data-theme="light"] #airpods01DetailContent .airpods01-page-toolbar button { color: #3d3d38; border-color: #c4c3bd; background: rgba(250,249,246,.94); }
+html[data-theme="light"] #airpods01ModelPageNav button:hover, html[data-theme="light"] #airpods01DetailContent .airpods01-page-toolbar button:hover { color: #111; border-color: #77766f; }
+html[data-theme="light"] #airpods01DetailContent .airpods01-page-tabs button[aria-pressed="true"] { color: #fff; border-color: #222; background: #222; }
+html[data-theme="light"] #detail.airpods01-subpage-active #airpods01DetailContent { background: #f2f1ed; }
+html[data-theme="light"] #airpods01DetailContent .airpods01-page-toolbar { border-color: #d4d3cd; background: rgba(242,241,237,.97); }
+html[data-theme="light"] #airpods01DetailContent > section { border-color: #d4d3cd; color: #222; background: #f2f1ed; }
+html[data-theme="light"] #airpods01DetailContent .added-section-heading h2 { color: #171717; }
+html[data-theme="light"] #airpods01DetailContent .spec-scroll { border-color: #c8c7c1; scrollbar-color: #aaa99f #e7e6e0; }
+html[data-theme="light"] #airpods01DetailContent .evolution-spec-table th, html[data-theme="light"] #airpods01DetailContent .evolution-spec-table td { border-color: #d7d6d0; color: #464640; }
+html[data-theme="light"] #airpods01DetailContent .evolution-spec-table thead th { color: #62625c; }
+html[data-theme="light"] #airpods01DetailContent .evolution-spec-table tbody th, html[data-theme="light"] #airpods01DetailContent .evolution-spec-table .price { color: #171717; }
+html[data-theme="light"] #airpods01DetailContent .evolution-spec-table small, html[data-theme="light"] #airpods01DetailContent .spec-footnote { color: #707069; }
+html[data-theme="light"] #airpods01DetailContent .archive-media { border-color: #d3d2cc; background: #fff; }
+html[data-theme="light"] #airpods01DetailContent .archive-media figcaption, html[data-theme="light"] #airpods01DetailContent .archive-media figcaption strong, html[data-theme="light"] #airpods01DetailContent .archive-film-full figcaption { color: #252520; }
+html[data-theme="light"] #airpods01DetailContent .archive-media figcaption span { color: #6b6b65; }
+html[data-theme="light"] #airpods01DetailContent .archive-film-full { background: #e7e6e0; }
+html[data-theme="light"] #airpods01DetailContent .archive-film-full video { background: #080808; }
+
+
+/* Additions shown only after opening AirPods 01. */
+#airpods01DetailContent, #airpods01DetailContent * { font-family: "Malgun Gothic", "맑은 고딕", sans-serif !important; }
+#airpods01ModelPageNav, #airpods01ModelPageNav * { font-family: "Malgun Gothic", "맑은 고딕", sans-serif !important; }
+#detail.airpods01-detail-open { overflow: hidden; }
+#airpods01DetailContent[hidden] { display: none !important; }
+#airpods01ModelPageNav { display: none; position: absolute; z-index: 12; left: 50%; bottom: 137px; transform: translateX(-50%); align-items: center; gap: 8px; white-space: nowrap; }
+#detail.airpods01-detail-open:not(.airpods01-subpage-active) #airpods01ModelPageNav { display: flex; }
+#airpods01ModelPageNav button, #airpods01DetailContent .airpods01-page-toolbar button { min-height: 38px; padding: 9px 14px; border: 1px solid #414141; color: #cfcfcf; background: rgba(8,8,8,.92); font-size: 11px; cursor: pointer; }
+#airpods01ModelPageNav button:hover, #airpods01DetailContent .airpods01-page-toolbar button:hover { color: #fff; border-color: #999; }
+#detail.airpods01-subpage-active > .detail-head, #detail.airpods01-subpage-active > .stage, #detail.airpods01-subpage-active > .detail-nav, #detail.airpods01-subpage-active > #airpods01ModelPageNav { display: none !important; }
+#detail.airpods01-subpage-active #airpods01DetailContent { display: block; position: absolute; inset: 0; z-index: 30; overflow-y: auto; overflow-x: hidden; background: #050505; pointer-events: auto; }
+#airpods01DetailContent .airpods01-page-toolbar { position: sticky; top: 0; z-index: 5; min-height: 62px; padding: 11px 5vw; display: flex; align-items: center; justify-content: space-between; gap: 18px; border-bottom: 1px solid #292929; background: rgba(5,5,5,.97); }
+#airpods01DetailContent .airpods01-page-tabs { display: flex; gap: 8px; }
+#airpods01DetailContent .airpods01-page-toolbar button { background: #101010; }
+#airpods01DetailContent .airpods01-page-tabs button[aria-pressed="true"] { color: #fff; border-color: #aaa; background: #202020; }
+#airpods01DetailContent > .airpods01-page-panel { display: none; min-height: calc(100vh - 62px); }
+#airpods01DetailContent > .airpods01-page-panel:not([hidden]) { display: block; }
+#airpods01DetailContent > .airpods01-page-panel[hidden] { display: none !important; }
+#airpods01DetailContent > section { position: relative; z-index: 2; width: 100%; padding: 88px 5vw 100px; border-top: 1px solid #222; color: #f4f4f4; background: #050505; pointer-events: auto; }
+#airpods01DetailContent .added-section-heading { margin: 0 0 30px; }
+#airpods01DetailContent .added-section-heading h2 { margin: 0; color: #f3f3f1; font: 400 clamp(30px,4vw,48px)/1.15 "Malgun Gothic", "맑은 고딕", sans-serif; letter-spacing: -.04em; }
+#airpods01DetailContent .spec-scroll { overflow-x: auto; border-top: 1px solid #333; border-bottom: 1px solid #333; scrollbar-color: #555 #111; }
+#airpods01DetailContent .evolution-spec-table { width: 100%; min-width: 1120px; border-collapse: collapse; table-layout: fixed; }
+#airpods01DetailContent .evolution-spec-table th, #airpods01DetailContent .evolution-spec-table td { padding: 17px 12px; border-bottom: 1px solid #252525; text-align: left; vertical-align: top; color: #c6c6c6; font: 11px/1.65 Arial, sans-serif; }
+#airpods01DetailContent .evolution-spec-table thead th { color: #888; font-size: 9px; font-weight: 400; letter-spacing: .13em; }
+#airpods01DetailContent .evolution-spec-table tbody th { width: 160px; color: #fff; font-size: 13px; font-weight: 400; }
+#airpods01DetailContent .evolution-spec-table small { display: block; margin-top: 5px; color: #777; font-size: 9px; }
+#airpods01DetailContent .evolution-spec-table .price { color: #fff; white-space: nowrap; }
+#airpods01DetailContent .evolution-spec-table tr:last-child th, #airpods01DetailContent .evolution-spec-table tr:last-child td { border-bottom: 0; }
+#airpods01DetailContent .spec-footnote { margin: 14px 0 0; color: #777; font: 10px/1.7 Arial, sans-serif; }
+#airpods01DetailContent .added-source-links { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 12px; }
+#airpods01DetailContent .added-source-links a { color: #888; font: 9px Arial, sans-serif; text-decoration: underline; text-underline-offset: 3px; }
+#airpods01DetailContent .archive-gallery-heading { margin-bottom: 28px; }
+#airpods01DetailContent .archive-media-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 22px; }
+#airpods01DetailContent .archive-media { display: flex; flex-direction: column; min-width: 0; margin: 0; overflow: hidden; border: 1px solid #292929; background: #101010; }
+#airpods01DetailContent .archive-media img { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: contain; background: #e8e8e5; transition: transform .7s ease; }
+#airpods01DetailContent .archive-media:hover img { transform: scale(1.025); }
+#airpods01DetailContent .archive-media figcaption { display: flex; align-items: baseline; gap: 12px; padding: 15px 18px 17px; color: #eee; font: 14px/1.5 "Malgun Gothic", "맑은 고딕", sans-serif; }
+#airpods01DetailContent .archive-media figcaption span { color: #999; font-size: 12px; }
+#airpods01DetailContent .archive-media figcaption strong { color: #eee; font-size: 14px; font-weight: 400; }
+#airpods01DetailContent .archive-film-full { width: min(100%,1100px); margin: 0 auto 44px; overflow: hidden; border: 1px solid #292929; background: #080808; }
+#airpods01DetailContent .archive-film-full video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: contain; background: #080808; }
+#airpods01DetailContent .archive-film-full figcaption { display: flex; align-items: baseline; gap: 12px; padding: 15px 18px 17px; border-top: 1px solid #292929; color: #eee; font: 14px/1.5 "Malgun Gothic", "맑은 고딕", sans-serif; }
+#airpods01DetailContent .archive-film-full figcaption strong { font-size: 15px; font-weight: 400; }
+#airpods01DetailContent .archive-film-full figcaption span { color: #999; font-size: 12px; }
+#airpods01DetailContent .story-page { max-width: 1180px; margin: 0 auto; }
+#airpods01DetailContent .story-kicker { margin: 0 0 18px; color: #92928d; font-size: 12px; letter-spacing: .04em; }
+#airpods01DetailContent .story-lead { max-width: 850px; margin: 24px 0 72px; color: #c4c4bf; font-size: clamp(16px,1.7vw,21px); line-height: 1.85; }
+#airpods01DetailContent .story-subhead { margin: 0 0 20px; color: #efefeb; font-size: 17px; font-weight: 400; }
+#airpods01DetailContent .story-timeline { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); margin-bottom: 72px; border-top: 1px solid #333; }
+#airpods01DetailContent .story-timeline article { display: grid; grid-template-columns: 132px 1fr; gap: 20px; padding: 24px 22px 28px 0; border-bottom: 1px solid #333; }
+#airpods01DetailContent .story-timeline time { color: #efefeb; font-size: 20px; line-height: 1.3; }
+#airpods01DetailContent .story-timeline h4 { margin: 0 0 8px; color: #efefeb; font-size: 14px; font-weight: 400; }
+#airpods01DetailContent .story-timeline p, #airpods01DetailContent .story-highlights p { margin: 0; color: #999994; font-size: 13px; line-height: 1.8; }
+#airpods01DetailContent .story-highlights { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); border-top: 1px solid #333; border-bottom: 1px solid #333; }
+#airpods01DetailContent .story-highlights article { min-height: 150px; padding: 22px 24px 24px 0; }
+#airpods01DetailContent .story-highlights article + article { padding-left: 24px; border-left: 1px solid #333; }
+#airpods01DetailContent .story-highlights h4 { margin: 0 0 10px; color: #efefeb; font-size: 14px; font-weight: 400; }
+#airpods01DetailContent .story-emotional-note { max-width: 850px; margin: 54px 0 0; padding-left: 22px; border-left: 1px solid #888; color: #deded9; font-size: clamp(16px,1.7vw,20px); line-height: 1.9; }
+#airpods01DetailContent .audio-evolution { max-width: 940px; margin-top: 84px; padding-top: 42px; border-top: 1px solid #333; }
+#airpods01DetailContent .audio-evolution-intro { max-width: 760px; margin: 0 0 28px; color: #999994; font-size: 14px; line-height: 1.8; }
+#airpods01DetailContent .audio-evolution-list { border-top: 1px solid #333; }
+#airpods01DetailContent .audio-evolution-item { display: grid; grid-template-columns: 124px minmax(0,1fr); align-items: center; gap: 16px; padding: 12px 0; border-bottom: 1px solid #333; }
+#airpods01DetailContent .audio-evolution-item img { display: block; width: 124px; height: 124px; border-radius: 16px; object-fit: contain; background: #f4f4f2; }
+#airpods01DetailContent .audio-evolution-item h4 { margin: 0 0 8px; color: #efefeb; font-size: 18px; font-weight: 400; }
+#airpods01DetailContent .audio-evolution-item .audio-evolution-year { margin: 0 0 4px; color: #aaa9a3; font-size: 14px; }
+#airpods01DetailContent .audio-evolution-item p:last-child { margin: 0; color: #c4c4bf; font-size: 15px; line-height: 1.65; }
+#airpods01DetailContent .audio-evolution-credits { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 16px 0 0; color: #777; font-size: 10px; line-height: 1.7; }
+#airpods01DetailContent .audio-evolution-credits a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+#airpods01DetailContent .audio-evolution-summary { margin: 28px 0 0; padding-top: 18px; border-top: 1px solid #333; color: #c4c4bf; font-size: 14px; line-height: 1.8; }
+html[data-theme="light"] #airpods01DetailContent .story-kicker { color: #77766f; }
+html[data-theme="light"] #airpods01DetailContent .story-lead { color: #55554f; }
+html[data-theme="light"] #airpods01DetailContent .story-subhead, html[data-theme="light"] #airpods01DetailContent .story-timeline time, html[data-theme="light"] #airpods01DetailContent .story-timeline h4, html[data-theme="light"] #airpods01DetailContent .story-highlights h4 { color: #22221e; }
+html[data-theme="light"] #airpods01DetailContent .story-timeline, html[data-theme="light"] #airpods01DetailContent .story-timeline article, html[data-theme="light"] #airpods01DetailContent .story-highlights { border-color: #d2d1cb; }
+html[data-theme="light"] #airpods01DetailContent .story-timeline p, html[data-theme="light"] #airpods01DetailContent .story-highlights p { color: #66665f; }
+html[data-theme="light"] #airpods01DetailContent .story-highlights article + article { border-color: #d2d1cb; }
+html[data-theme="light"] #airpods01DetailContent .story-emotional-note { border-color: #92918a; color: #44443f; }
+html[data-theme="light"] #airpods01DetailContent .audio-evolution, html[data-theme="light"] #airpods01DetailContent .audio-evolution-list, html[data-theme="light"] #airpods01DetailContent .audio-evolution-item { border-color: #d2d1cb; }
+html[data-theme="light"] #airpods01DetailContent .audio-evolution-intro { color: #66665f; }
+html[data-theme="light"] #airpods01DetailContent .audio-evolution-item h4 { color: #22221e; }
+html[data-theme="light"] #airpods01DetailContent .audio-evolution-item .audio-evolution-year { color: #77766f; }
+html[data-theme="light"] #airpods01DetailContent .audio-evolution-item p:last-child { color: #55554f; }
+html[data-theme="light"] #airpods01DetailContent .audio-evolution-credits { color: #77766f; }
+html[data-theme="light"] #airpods01DetailContent .audio-evolution-summary { border-color: #d2d1cb; color: #55554f; }
+html[data-theme="light"] #airpods01DetailContent .audio-evolution-summary strong { color: #22221e; }
+@media (max-width: 760px) {
+  #airpods01ModelPageNav { bottom: 112px; gap: 5px; }
+  #airpods01ModelPageNav button { min-height: 34px; padding: 7px 10px; font-size: 10px; }
+  #airpods01DetailContent .airpods01-page-toolbar { align-items: flex-start; flex-direction: column; gap: 9px; padding: 10px 20px; }
+  #airpods01DetailContent .airpods01-page-tabs { width: 100%; gap: 5px; }
+  #airpods01DetailContent .airpods01-page-tabs button { flex: 1; padding: 8px 5px; }
+  #airpods01DetailContent > section { padding: 65px 20px 70px; }
+  #airpods01DetailContent .added-section-heading { margin-bottom: 24px; }
+  #airpods01DetailContent .archive-media-grid { grid-template-columns: 1fr; gap: 14px; }
+  #airpods01DetailContent .archive-film-full { margin-top: 32px; }
+  #airpods01DetailContent .archive-film-full figcaption { padding: 12px 10px; }
+  #airpods01DetailContent .story-lead { margin: 20px 0 48px; }
+  #airpods01DetailContent .story-timeline { grid-template-columns: 1fr; margin-bottom: 48px; }
+  #airpods01DetailContent .story-timeline article { grid-template-columns: 94px 1fr; gap: 12px; padding-right: 0; }
+  #airpods01DetailContent .story-timeline time { font-size: 17px; }
+  #airpods01DetailContent .story-highlights { grid-template-columns: 1fr; }
+  #airpods01DetailContent .story-highlights article { min-height: 0; padding: 18px 0; }
+  #airpods01DetailContent .story-highlights article + article { padding-left: 0; border-left: 0; border-top: 1px solid #333; }
+  html[data-theme="light"] #airpods01DetailContent .story-highlights article + article { border-color: #d2d1cb; }
+  #airpods01DetailContent .audio-evolution { margin-top: 58px; padding-top: 30px; }
+  #airpods01DetailContent .audio-evolution-item { grid-template-columns: 88px minmax(0,1fr); gap: 12px; padding: 10px 0; }
+  #airpods01DetailContent .audio-evolution-item img { width: 88px; height: 88px; border-radius: 13px; }
+  #airpods01DetailContent .audio-evolution-item h4 { margin-bottom: 5px; font-size: 15px; }
+  #airpods01DetailContent .audio-evolution-item .audio-evolution-year { font-size: 12px; }
+  #airpods01DetailContent .audio-evolution-item p:last-child { font-size: 12px; line-height: 1.55; }
+}
+
 </style>
 </head>
 
@@ -752,6 +983,10 @@ body.cursor-hover .cursor-dot {
 <div class="header">
   <div class="logo" onclick="goHome()">
     EVOLVE.
+  </div>
+  <div class="theme-toggle" role="group" aria-label="화면 모드 선택">
+    <button type="button" data-theme-choice="light" aria-pressed="false" onclick="setEvolveTheme('light')">라이트</button>
+    <button type="button" data-theme-choice="dark" aria-pressed="true" onclick="setEvolveTheme('dark')">나이트</button>
   </div>
 </div>
 
@@ -773,15 +1008,15 @@ body.cursor-hover .cursor-dot {
       <small>A STUDY OF CHANGE</small>
       <h1>EVOLVE<span class="period">.</span></h1>
       <p>
-        제품은 완성된 모습으로 시작되지 않는다.<br>
-        형태와 구조는 시간에 따라 계속 달라진다.
+        제품은 완성된 모습으로 시작하지 않습니다.<br>
+        형태와 구조는 시간에 따라 계속 달라집니다.
       </p>
     </div>
 
     <div class="side" id="side">
       <div class="n">01 / 03</div>
       <h2 id="sideTitle">FORM<br>CHANGES.</h2>
-      <p id="sideText">익숙한 제품도 처음부터 지금의 모습이었던 것은 아니다.</p>
+      <p id="sideText">익숙한 제품도 처음부터 지금의 모습이었던 것은 아닙니다.</p>
     </div>
 
     <div class="bar"><i id="bar"></i></div>
@@ -794,37 +1029,37 @@ body.cursor-hover .cursor-dot {
   <main id="archive">
     <section class="hero">
       <h1>PRODUCTS<br>EVOLVE.</h1>
-      <p>하나의 제품을 선택하고, 그 안으로 들어간다.<br>겉으로 보이는 형태부터 내부를 이루는 구조까지.</p>
+      <p>하나의 제품을 선택해 그 안으로 들어갑니다.<br>겉으로 보이는 형태부터 내부 구조까지 살펴봅니다.</p>
     </section>
 
     <section class="grid">
       <article class="card" onclick="openDetail(1)">
-        <div class="video-wrap"><video muted loop playsinline preload="none" data-src="videos/airpods_01.mp4"></video><div class="hint">OPEN PRODUCT ↗</div></div>
+        <div class="video-wrap"><video muted loop playsinline preload="none" data-src="videos/airpods_01.mp4"></video><div class="hint">OPEN PRODUCT</div></div>
         <div class="meta"><div><div class="title">AirPods </div><div class="desc">Product study / visual archive</div></div><div class="year">2016</div></div>
       </article>
 
       <article class="card" onclick="openDetail(2)">
-        <div class="video-wrap"><video muted loop playsinline preload="none" data-src="videos/airpods_02.mp4"></video><div class="hint">OPEN PRODUCT ↗</div></div>
+        <div class="video-wrap"><video muted loop playsinline preload="none" data-src="videos/airpods_02.mp4"></video><div class="hint">OPEN PRODUCT</div></div>
         <div class="meta"><div><div class="title">AirPods 2</div><div class="desc">Product study / visual archive</div></div><div class="year">2019</div></div>
       </article>
 
       <article class="card" onclick="openDetail(3)">
-        <div class="video-wrap"><video muted loop playsinline preload="none" data-src="videos/airpods_03.mp4"></video><div class="hint">OPEN PRODUCT ↗</div></div>
+        <div class="video-wrap"><video muted loop playsinline preload="none" data-src="videos/airpods_03.mp4"></video><div class="hint">OPEN PRODUCT</div></div>
         <div class="meta"><div><div class="title">AirPods 3</div><div class="desc">Product study / visual archive</div></div><div class="year">2021</div></div>
       </article>
 
       <article class="card" onclick="openDetail(4)">
-        <div class="video-wrap"><video muted loop playsinline preload="none" data-src="videos/airpods_04.mp4"></video><div class="hint">OPEN PRODUCT ↗</div></div>
+        <div class="video-wrap"><video muted loop playsinline preload="none" data-src="videos/airpods_04.mp4"></video><div class="hint">OPEN PRODUCT</div></div>
         <div class="meta"><div><div class="title">AirPods Pro</div><div class="desc">Product study / visual archive</div></div><div class="year">2019</div></div>
       </article>
 
       <article class="card" onclick="openDetail(5)">
-        <div class="video-wrap"><video muted loop playsinline preload="none" data-src="videos/airpods_05.mp4"></video><div class="hint">OPEN PRODUCT ↗</div></div>
+        <div class="video-wrap"><video muted loop playsinline preload="none" data-src="videos/airpods_05.mp4"></video><div class="hint">OPEN PRODUCT</div></div>
         <div class="meta"><div><div class="title">AirPods Pro 2</div><div class="desc">Product study / visual archive</div></div><div class="year">2022</div></div>
       </article>
 
       <article class="card" onclick="openDetail(6)">
-        <div class="video-wrap"><video muted loop playsinline preload="none" data-src="videos/airpods_06.mp4"></video><div class="hint">OPEN PRODUCT ↗</div></div>
+        <div class="video-wrap"><video muted loop playsinline preload="none" data-src="videos/airpods_06.mp4"></video><div class="hint">OPEN PRODUCT</div></div>
         <div class="meta"><div><div class="title">AirPods 4</div><div class="desc">Product study / visual archive</div></div><div class="year">2024</div></div>
       </article>
     </section>
@@ -837,7 +1072,7 @@ body.cursor-hover .cursor-dot {
     <div>
       <button class="back" id="backToProducts" type="button">← ALL PRODUCTS</button>
       <h1 class="detail-title" id="detailTitle">AirPods</h1>
-      <a class="purchase-link" href="https://www.apple.com/kr/airpods-pro/" target="_blank" rel="noopener noreferrer">구매하기 ↗</a>
+      <a class="purchase-link" href="https://www.apple.com/kr/airpods-pro/" target="_blank" rel="noopener noreferrer">구매하기</a>
     </div>
 
     <div class="detail-meta">
@@ -876,22 +1111,22 @@ body.cursor-hover .cursor-dot {
       <div class="callout earbuds">
         <span class="part-no">01 / ACOUSTIC UNIT</span>
         <strong>이어버드</strong>
-        <p>귀에 착용해 소리를 재생하고 마이크로 주변 소리를 감지한다.</p>
+        <p>이어버드는 소리를 재생하고 마이크로 주변 소리를 감지합니다.</p>
       </div>
       <div class="callout eartip">
         <span class="part-no">02 / SILICONE EAR TIP</span>
         <strong>이어팁</strong>
-        <p>귀 안쪽에 밀착되어 착용감을 높이고 외부 소음을 차단하는 실리콘 부품.</p>
+        <p>실리콘 부품으로 귀 안쪽에 밀착시켜 착용감을 높이고 외부 소음을 줄입니다.</p>
       </div>
       <div class="callout case">
         <span class="part-no">03 / CHARGING CASE</span>
         <strong>충전 케이스</strong>
-        <p>이어버드를 보관하고 이동 중 배터리를 충전하는 케이스.</p>
+        <p>케이스는 이어버드를 보관하고 이동 중에 충전합니다.</p>
       </div>
       <div class="callout hinge">
         <span class="part-no">04 / HINGE & CONTACT</span>
         <strong>힌지 · 충전 접점</strong>
-        <p>케이스 뚜껑의 회전을 지지하는 힌지와 충전을 위한 접점 부위.</p>
+        <p>힌지는 케이스 뚜껑의 회전을 지지하고, 접점은 충전을 돕습니다.</p>
       </div>
     </div>
     <div class="click" id="stageClickHint">CLICK MODEL TO PLAY ANIMATION · DRAG TO ROTATE</div>
@@ -910,6 +1145,110 @@ body.cursor-hover .cursor-dot {
     </div>
 
     <button class="detail-arrow" type="button" onclick="changeProduct(1)" aria-label="Next product">→</button>
+  </div>
+
+  <nav id="airpods01ModelPageNav" class="airpods01-model-page-nav" aria-label="AirPods 01 상세 메뉴">
+    <button type="button" onclick="openAirpods01Page('story')">제품 이야기</button>
+    <button type="button" onclick="openAirpods01Page('specs')">사양 비교</button>
+    <button type="button" onclick="openAirpods01Page('gallery')">이미지·영상</button>
+  </nav>
+
+  <div id="airpods01DetailContent" class="airpods01-detail-content" hidden>
+    <nav class="airpods01-page-toolbar" aria-label="AirPods 01 상세 메뉴">
+      <button class="airpods01-return" type="button" onclick="closeAirpods01Page()">3D 모델</button>
+      <div class="airpods01-page-tabs">
+        <button type="button" data-airpods01-tab="story" onclick="openAirpods01Page('story')">제품 이야기</button>
+        <button type="button" data-airpods01-tab="specs" onclick="openAirpods01Page('specs')">사양 비교</button>
+        <button type="button" data-airpods01-tab="gallery" onclick="openAirpods01Page('gallery')">이미지·영상</button>
+      </div>
+    </nav>
+<section class="airpods01-page-panel airpods01-story-section" id="airpods01Story" data-airpods01-page="story" hidden>
+  <div class="story-page">
+    <header class="added-section-heading">
+      <p class="story-kicker">첫 세대 · 2016</p>
+      <h2>AirPods의 시작</h2>
+      <p class="story-lead">AirPods는 2016년 9월 공개되고, 같은 해 12월 온라인 주문을 시작했습니다. W1 칩을 바탕으로 기기 연결 과정을 단순하게 만들고, 귀에 꽂고 빼는 동작을 재생과 일시 정지에 연결했습니다.</p>
+    </header>
+    <h3 class="story-subhead">출시 기록</h3>
+    <div class="story-timeline">
+      <article><time datetime="2016-09">2016.09</time><div><h4>제품 공개</h4><p>Apple이 첫 세대 AirPods를 공개했습니다.</p></div></article>
+      <article><time datetime="2016-12">2016.12</time><div><h4>주문 시작</h4><p>12월 13일부터 Apple 온라인 스토어에서 주문을 받기 시작했습니다.</p></div></article>
+    </div>
+    <h3 class="story-subhead">처음 선보인 사용 방식</h3>
+    <div class="story-highlights">
+      <article><h4>간단한 연결</h4><p>충전 케이스를 iPhone 가까이 열고 한 번 탭해 연결을 시작합니다.</p></article>
+      <article><h4>자동 착용 감지</h4><p>귀에 꽂으면 오디오를 재생하고, 빼면 재생을 일시 정지합니다.</p></article>
+      <article><h4>두 번 탭</h4><p>AirPods을 두 번 탭해 Siri를 호출하고 음악이나 통화를 제어합니다.</p></article>
+    </div>
+    <p class="story-emotional-note">케이스를 열고 귀에 꽂는 몇 초, 음악은 곧바로 이어졌습니다. 듣기 전의 준비가 줄어든 만큼 좋아하는 노래를 필요할 때 바로 만날 수 있었습니다.</p>
+    <section class="audio-evolution" aria-labelledby="audioEvolutionHeading">
+      <h3 class="story-subhead" id="audioEvolutionHeading">음악을 듣는 방식의 변화</h3>
+      <p class="audio-evolution-intro">음악은 라디오와 카세트, CD를 거쳐 손안의 수많은 곡이 되었고, 이제는 케이스를 여는 순간 귀에 닿습니다.</p>
+      <div class="audio-evolution-list">
+        <article class="audio-evolution-item">
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Vintage_Personna_Transistor_Radio,_Model_TR-600,_AM_Band,_6_Transistors,_Made_In_Japan,_Circa_1958_(13041472365).jpg?width=512" alt="1958년 무렵의 휴대용 트랜지스터 라디오" loading="lazy" decoding="async">
+          <div><h4>01. 휴대용 라디오</h4><p class="audio-evolution-year">1950~60년대</p><p>라디오 방송을 휴대하며 듣는 시대</p></div>
+        </article>
+        <article class="audio-evolution-item">
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Walkman_TPS-L2.jpg?width=512" alt="소니 워크맨 TPS-L2" loading="lazy" decoding="async">
+          <div><h4>02. 소니 워크맨</h4><p class="audio-evolution-year">1979</p><p>카세트테이프로 원하는 음악을 개인적으로 감상</p></div>
+        </article>
+        <article class="audio-evolution-item">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/3/37/Sony_D50_Discman.JPG" alt="1984년 소니 디스크맨 D-50" loading="lazy" decoding="async">
+          <div><h4>03. 소니 디스크맨</h4><p class="audio-evolution-year">1984</p><p>CD를 이용한 디지털 음악 감상</p></div>
+        </article>
+        <article class="audio-evolution-item">
+          <img src="https://www.apple.com/newsroom/images/product/ipod/standard/Apple-iPod-end-of-life-iPod-first-generation_carousel.jpg.large.jpg" alt="1세대 애플 아이팟" loading="lazy" decoding="async">
+          <div><h4>04. 애플 아이팟</h4><p class="audio-evolution-year">2001</p><p>수많은 음악을 작은 기기에 저장</p></div>
+        </article>
+        <article class="audio-evolution-item">
+          <img src="https://www.apple.com/newsroom/images/product/airpods/standard/apple-airpod-open_inline.jpg.large.jpg" alt="2016년 애플 에어팟과 충전 케이스" loading="lazy" decoding="async">
+          <div><h4>05. 애플 에어팟</h4><p class="audio-evolution-year">2016</p><p>충전 케이스와 완전 무선 이어폰의 결합</p></div>
+        </article>
+      </div>
+      <p class="audio-evolution-summary"><strong>최종 타임라인:</strong> 라디오 → 워크맨 → 디스크맨 → 아이팟 → 에어팟</p>
+      <p class="audio-evolution-credits"><span>사진 출처</span><a href="https://commons.wikimedia.org/wiki/File:Vintage_Personna_Transistor_Radio,_Model_TR-600,_AM_Band,_6_Transistors,_Made_In_Japan,_Circa_1958_(13041472365).jpg" target="_blank" rel="noopener">라디오 · Joe Haupt (CC BY-SA 2.0)</a><a href="https://commons.wikimedia.org/wiki/File:Walkman_TPS-L2.jpg" target="_blank" rel="noopener">워크맨 · Anna Gerdén (CC BY-SA 3.0)</a><a href="https://commons.wikimedia.org/wiki/File:Sony_D50_Discman.JPG" target="_blank" rel="noopener">디스크맨 · Binarysequence (CC BY-SA 4.0)</a><a href="https://www.apple.com/newsroom/2001/10/23Apple-Presents-iPod/" target="_blank" rel="noopener">iPod · Apple</a><a href="https://www.apple.com/newsroom/2016/09/apple-reinvents-the-wireless-headphones-with-airpods/" target="_blank" rel="noopener">AirPods · Apple</a></p>
+    </section>
+  </div>
+</section>
+<!-- ADDED: EVOLUTION SPEC COMPARISON -->
+<section class="airpods01-page-panel spec-compare-section" id="evolutionComparison" data-airpods01-page="specs" hidden>
+  <header class="added-section-heading"><h2>세대별 사양</h2></header>
+  <div class="spec-scroll" role="region" aria-label="AirPods 세대별 사양 비교 표" tabindex="0">
+    <table class="evolution-spec-table">
+      <thead><tr><th scope="col">항목</th><th scope="col">1세대<br>2016</th><th scope="col">2세대<br>2019</th><th scope="col">Pro<br>2019</th><th scope="col">3세대<br>2021</th><th scope="col">Pro 2<br>2022</th><th scope="col">4세대<br>2024</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">폼팩터 크기<small>한쪽 이어버드 · 세로×가로×두께</small></th><td>오픈형<br>40.5 × 16.5 × 18.0 mm</td><td>오픈형<br>40.5 × 16.5 × 18.0 mm</td><td>커널형 · 실리콘 팁<br>30.9 × 21.8 × 24.0 mm</td><td>오픈형 · 짧은 스템<br>30.79 × 18.26 × 19.21 mm</td><td>커널형 · 실리콘 팁<br>30.9 × 21.8 × 24.0 mm</td><td>오픈형 · 재설계<br>30.2 × 18.3 × 18.1 mm</td></tr>
+        <tr><th scope="row">칩셋</th><td>W1</td><td>H1</td><td>H1</td><td>H1</td><td>H2</td><td>H2</td></tr>
+        <tr><th scope="row">무게<small>한쪽 이어버드</small></th><td>4.0 g</td><td>4.0 g</td><td>5.4 g</td><td>4.28 g</td><td>5.3 g</td><td>4.3 g</td></tr>
+        <tr><th scope="row">배터리<small>이어버드 / 케이스 합산 최대</small></th><td>5시간 / 24시간 이상</td><td>5시간 / 24시간 이상</td><td>4.5시간 (ANC) / 24시간</td><td>6시간 / 30시간</td><td>6시간 (ANC) / 30시간</td><td>5시간 / 30시간</td></tr>
+        <tr><th scope="row">국내 출시가</th><td class="price">219,000원</td><td class="price">199,000원</td><td class="price">329,000원</td><td class="price">249,000원</td><td class="price">359,000원</td><td class="price">199,000원<small>ANC 모델 269,000원</small></td></tr>
+        <tr><th scope="row">주요 기술 변화</th><td>W1 무선 연결<br>자동 귀 감지</td><td>H1 · “Siri야”<br>무선 케이스 옵션</td><td>액티브 노이즈 캔슬링<br>주변음 허용 · 실리콘 팁</td><td>공간 음향 · 적응형 EQ<br>포스 센서 · 짧은 스템</td><td>H2 · 강화된 ANC<br>스템 스와이프 음량 조절</td><td>H2 · 새 오픈형 설계<br>음성 분리 · ANC 옵션</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="spec-footnote">배터리 시간은 최대 측정값입니다. Pro 모델은 ANC를 켠 기준이며, 4세대 가격은 기본형과 ANC형 순서입니다.</p>
+</section>
+
+<!-- ADDED: FULL ARCHIVE GALLERY & VIDEO FOOTAGE -->
+<section class="airpods01-page-panel archive-gallery-added" id="fullArchiveGallery" data-airpods01-page="gallery" hidden>
+  <header class="added-section-heading archive-gallery-heading"><h2>제품 이미지와 영상</h2></header>
+  <figure class="archive-film-full">
+    <video controls playsinline preload="metadata" poster="https://www.apple.com/newsroom/images/product/airpods/standard/airpods-inline.gif.large.gif" aria-label="AirPods 01 제품 영상">
+      <source src="videos/airpods_01.mp4" type="video/mp4">
+      브라우저에서 이 영상을 재생할 수 없습니다.
+    </video>
+    <figcaption><strong>AirPods 01</strong><span>2016 제품 영상</span></figcaption>
+  </figure>
+  <div class="archive-media-grid">
+    <figure class="archive-media media-2016"><img src="https://www.apple.com/newsroom/images/product/airpods/standard/airpods-inline.gif.large.gif" alt="2016년 AirPods 제품 렌더링" loading="lazy" decoding="async"><figcaption><span>2016</span><strong>AirPods</strong></figcaption></figure>
+    <figure class="archive-media media-2019"><img src="https://www.apple.com/newsroom/images/product/airpods/standard/Apple-AirPods-worlds-most-popular-wireless-headphones_03202019_big.jpg.large.jpg" alt="2019년 AirPods 2 제품 렌더링" loading="lazy" decoding="async"><figcaption><span>2019</span><strong>AirPods 2</strong></figcaption></figure>
+    <figure class="archive-media media-pro"><img src="https://www.apple.com/newsroom/images/product/airpods/standard/Apple_AirPods-Pro_New-Design_102819_big.jpg.large.jpg" alt="2019년 AirPods Pro 제품 렌더링" loading="lazy" decoding="async"><figcaption><span>2019</span><strong>AirPods Pro</strong></figcaption></figure>
+    <figure class="archive-media media-2021"><img src="https://www.apple.com/newsroom/images/product/airpods/standard/Apple_AirPods-3rd-gen_hero_10182021_inline.jpg.large.jpg" alt="2021년 AirPods 3 제품 렌더링" loading="lazy" decoding="async"><figcaption><span>2021</span><strong>AirPods 3</strong></figcaption></figure>
+    <figure class="archive-media media-pro2"><img src="https://www.apple.com/newsroom/images/product/airpods/standard/Apple-AirPods-Pro-2nd-gen-hero-220907_big.jpg.large.jpg" alt="2022년 AirPods Pro 2 제품 렌더링" loading="lazy" decoding="async"><figcaption><span>2022</span><strong>AirPods Pro 2</strong></figcaption></figure>
+    <figure class="archive-media media-2024"><img src="https://www.apple.com/newsroom/images/2024/09/apple-introduces-airpods-4/article/Apple-AirPods-4-with-case-240909_big.jpg.large.jpg" alt="2024년 AirPods 4 제품 렌더링" loading="lazy" decoding="async"><figcaption><span>2024</span><strong>AirPods 4</strong></figcaption></figure>
+  </div>
+</section>
   </div>
 </section>
 
@@ -933,6 +1272,19 @@ body.cursor-hover .cursor-dot {
 </section>
 
 <script>
+
+function setEvolveTheme(theme) {
+  const selectedTheme = theme === 'light' ? 'light' : 'dark';
+  document.documentElement.dataset.theme = selectedTheme;
+  try {
+    localStorage.setItem('evolveTheme', selectedTheme);
+  } catch (_) {}
+  document.querySelectorAll('[data-theme-choice]').forEach((button) => {
+    button.setAttribute('aria-pressed', String(button.dataset.themeChoice === selectedTheme));
+  });
+}
+
+setEvolveTheme(document.documentElement.dataset.theme || 'dark');
 
 function goHome() {
   closeDetail();
@@ -1013,9 +1365,9 @@ function goToArchive() {
   bindHoverEvents();
 
   const data = [
-    ["FORM<br>CHANGES.", "익숙한 제품도 처음부터 지금의 모습이었던 것은 아니다."],
-    ["TECHNOLOGY<br>CHANGES.", "작은 부품과 기술의 변화가 제품의 형태와 사용 방식을 바꾼다."],
-    ["PRODUCTS<br>EVOLVE.", "변화가 쌓여 지금 우리가 사용하는 하나의 제품이 만들어진다."]
+    ["FORM<br>CHANGES.", "익숙한 제품도 처음부터 지금의 모습이었던 것은 아닙니다."],
+    ["TECHNOLOGY<br>CHANGES.", "작은 부품과 기술의 변화가 제품의 형태와 사용 방식을 바꿉니다."],
+    ["PRODUCTS<br>EVOLVE.", "변화가 쌓여 지금 우리가 사용하는 하나의 제품이 만들어집니다."]
   ];
 
   const images = new Map([[0, frame]]);
@@ -1271,6 +1623,18 @@ function openDetail(i) {
 
 function selectProduct(index) {
   currentProduct = Math.max(0, Math.min(products.length - 1, index));
+  const detailView = document.getElementById('detail');
+  const airpods01Content = document.getElementById('airpods01DetailContent');
+  const isAirPods01 = currentProduct === 0;
+  if (detailView) {
+    detailView.classList.toggle('airpods01-detail-open', isAirPods01);
+    detailView.classList.remove('airpods01-subpage-active');
+    if (!isAirPods01) detailView.scrollTo(0, 0);
+  }
+  if (airpods01Content) {
+    airpods01Content.hidden = true;
+    airpods01Content.scrollTop = 0;
+  }
 
   const product = products[currentProduct];
   document.getElementById('detailTitle').textContent = product.name;
@@ -1416,6 +1780,36 @@ function changeProduct(direction) {
   if (next < 0) next = products.length - 1;
   if (next >= products.length) next = 0;
   selectProduct(next);
+}
+
+function openAirpods01Page(pageName) {
+  if (currentProduct !== 0 || !['story', 'specs', 'gallery'].includes(pageName)) return;
+  const detailView = document.getElementById('detail');
+  const content = document.getElementById('airpods01DetailContent');
+  if (!detailView || !content) return;
+
+  content.hidden = false;
+  content.dataset.page = pageName;
+  detailView.classList.add('airpods01-subpage-active');
+  content.scrollTop = 0;
+  content.querySelectorAll('.airpods01-page-panel').forEach((panel) => {
+    panel.hidden = panel.dataset.airpods01Page !== pageName;
+  });
+  content.querySelectorAll('[data-airpods01-tab]').forEach((tab) => {
+    const active = tab.dataset.airpods01Tab === pageName;
+    tab.setAttribute('aria-pressed', String(active));
+  });
+}
+
+function closeAirpods01Page() {
+  const detailView = document.getElementById('detail');
+  const content = document.getElementById('airpods01DetailContent');
+  if (content) {
+    content.hidden = true;
+    content.scrollTop = 0;
+    delete content.dataset.page;
+  }
+  if (detailView) detailView.classList.remove('airpods01-subpage-active');
 }
 
 function closeDetail() {
