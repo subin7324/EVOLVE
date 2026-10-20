@@ -1001,7 +1001,7 @@ html[data-theme="light"] #airpods01DetailContent .audio-evolution-summary strong
 <!-- INTRO SECTION -->
 <section class="intro" id="intro">
   <div class="sticky">
-    <img id="frame" src="frames_webp/frame_00000.webp" alt="" draggable="false">
+    <img id="frame" src="frames/frame_00000.png" alt="" draggable="false">
     <div class="overlay"></div>
 
     <div class="copy" id="copy">
@@ -1370,28 +1370,14 @@ function goToArchive() {
     ["PRODUCTS<br>EVOLVE.", "변화가 쌓여 지금 우리가 사용하는 하나의 제품이 만들어집니다."]
   ];
 
-  const images = new Map([[0, frame]]);
-  const MAX_CACHED_FRAMES = 8;
+  const images = [];
   let shown = -1, raf = 0;
 
-  function getFrame(index) {
-    let image = images.get(index);
-    if (image) {
-      images.delete(index);
-      images.set(index, image);
-      return image;
-    }
-
-    image = new Image();
-    image.decoding = "async";
-    image.onload = requestRender;
-    image.src = "frames_webp/frame_" + String(index).padStart(5, "0") + ".webp";
-    images.set(index, image);
-
-    while (images.size > MAX_CACHED_FRAMES) {
-      images.delete(images.keys().next().value);
-    }
-    return image;
+  for (let i = 0; i < FRAME_COUNT; i++) {
+    const img = new Image();
+    img.decoding = "async";
+    img.src = "frames/frame_" + String(i).padStart(5, "0") + ".png";
+    images.push(img);
   }
 
   function clamp(value) { return Math.max(0, Math.min(1, value)); }
@@ -1401,15 +1387,9 @@ function goToArchive() {
     const progress = clamp(-intro.getBoundingClientRect().top / max);
     const target = Math.round(progress * (FRAME_COUNT - 1));
 
-    const currentFrame = getFrame(target);
-    if (target !== shown && currentFrame.complete && currentFrame.naturalWidth) {
-      frame.src = currentFrame.src;
+    if (target !== shown && images[target] && images[target].complete) {
+      frame.src = images[target].src;
       shown = target;
-    }
-
-    for (const offset of [-2, -1, 1, 2]) {
-      const nearbyFrame = target + offset;
-      if (nearbyFrame >= 0 && nearbyFrame < FRAME_COUNT) getFrame(nearbyFrame);
     }
 
     const p = clamp(progress / 0.82);
@@ -1828,3 +1808,4 @@ function closeExplode() {
 
 </body>
 </html>
+s
