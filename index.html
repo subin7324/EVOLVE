@@ -8,6 +8,15 @@
 
 <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 <script>
+  customElements.whenDefined('model-viewer').then(() => {
+    const ModelViewer = customElements.get('model-viewer');
+    // Let model-viewer lower its render resolution further on slower GPUs.
+    ModelViewer.minimumRenderScale = 0.35;
+    // Keep fewer inactive GLB scenes resident in memory.
+    ModelViewer.modelCacheSize = 2;
+  });
+</script>
+<script>
 try {
   document.documentElement.dataset.theme = localStorage.getItem('evolveTheme') === 'light' ? 'light' : 'dark';
 } catch (_) {
@@ -1944,11 +1953,16 @@ function stopAirPodsCameraTargetFollow() {
 
 function startAirPodsCameraTargetFollow(model) {
   stopAirPodsCameraTargetFollow();
-  const follow = () => {
+  let lastCameraUpdate = 0;
+  const follow = (frameTime) => {
     const duration = Number.isFinite(model.duration) && model.duration > 0
       ? model.duration : airPodsCenterSamples[airPodsCenterSamples.length - 1][0];
     const time = Math.max(0, Math.min(duration, model.currentTime || 0));
-    setAirPodsCameraTarget(model, time);
+    // The animation itself remains full speed; camera framing only needs 30 updates/sec.
+    if (!lastCameraUpdate || frameTime - lastCameraUpdate >= 1000 / 30 || time >= duration - .01) {
+      setAirPodsCameraTarget(model, time);
+      lastCameraUpdate = frameTime;
+    }
     if (!model.paused && time < duration - .01) {
       cameraTargetFollowFrame = requestAnimationFrame(follow);
     } else {
@@ -2168,7 +2182,7 @@ function selectProduct(index) {
     }
 
   } else {
-    model.autoRotate = true;
+    model.autoRotate = false;
     hint.textContent = "DRAG TO ROTATE · SCROLL TO ZOOM";
   }
 
