@@ -1299,6 +1299,8 @@ html[data-theme="light"] #airpods01DetailContent #evolutionComparison .spec-foot
   #airpods01DetailContent #evolutionComparison .evolution-spec-table thead th:first-child,
   #airpods01DetailContent #evolutionComparison .evolution-spec-table tbody th { width: 146px; }
 }
+#airpods01DetailContent #fullArchiveGallery .archive-film-full { width: min(100%, 760px); }
+#airpods01DetailContent #fullArchiveGallery .archive-media-grid { max-width: 920px; margin: 0 auto; gap: 20px; }
 #productModel { transform: scale(.8); transform-origin: 50% 50%; }
 #productModel::part(default-progress-bar) { display: none !important; }
 </style>
@@ -1325,7 +1327,7 @@ html[data-theme="light"] #airpods01DetailContent #evolutionComparison .spec-foot
 <!-- INTRO SECTION -->
 <section class="intro" id="intro">
   <div class="sticky">
-    <img id="frame" src="frames/frame_00000.png" alt="" draggable="false">
+    <img id="frame" src="frames-webp/frame_00000.webp" alt="" draggable="false">
     <div class="overlay"></div>
 
     <div class="copy" id="copy">
@@ -1565,8 +1567,8 @@ html[data-theme="light"] #airpods01DetailContent #evolutionComparison .spec-foot
 <section class="airpods01-page-panel archive-gallery-added" id="fullArchiveGallery" data-airpods01-page="gallery" hidden>
   <header class="added-section-heading archive-gallery-heading"><h2>제품 이미지와 영상</h2></header>
   <figure class="archive-film-full">
-    <video controls playsinline preload="metadata" poster="https://www.apple.com/newsroom/images/product/airpods/standard/airpods-inline.gif.large.gif" aria-label="AirPods 01 제품 영상">
-      <source src="videos/airpods_01.mp4" type="video/mp4">
+    <video controls playsinline preload="none" data-poster="https://www.apple.com/newsroom/images/product/airpods/standard/airpods-inline.gif.large.gif" aria-label="AirPods 01 제품 영상">
+      <source data-src="videos/airpods_01.mp4" type="video/mp4">
       브라우저에서 이 영상을 재생할 수 없습니다.
     </video>
     <figcaption><strong>AirPods 01</strong><span>2016 제품 영상</span></figcaption>
@@ -1591,7 +1593,7 @@ html[data-theme="light"] #airpods01DetailContent #evolutionComparison .spec-foot
   </div>
 
   <div class="explode-stage">
-    <model-viewer src="models/airpods_exploded.glb" camera-controls touch-action="pan-y" camera-orbit="0deg 72deg 105%" exposure="0.65" shadow-intensity="0.7" environment-image="legacy" tone-mapping="agx"></model-viewer>
+    <model-viewer src="models/airpods_exploded.glb" loading="lazy" camera-controls touch-action="pan-y" camera-orbit="0deg 72deg 105%" exposure="0.65" shadow-intensity="0.7" environment-image="legacy" tone-mapping="agx"></model-viewer>
   </div>
 
   <div class="explode-labels">
@@ -1658,14 +1660,67 @@ function goToArchive() {
     ["PRODUCTS<br>EVOLVE.", "변화가 쌓여 지금 우리가 사용하는 하나의 제품이 만들어집니다."]
   ];
 
-  const images = [];
+  const frameCache = new Map();
+  const pendingFrames = new Map();
+  const queuedFrames = new Set();
+  const frameQueue = [];
+  let activeFrameLoads = 0;
+  let desiredFrame = -1;
   let shown = -1, raf = 0;
 
-  for (let i = 0; i < FRAME_COUNT; i++) {
-    const img = new Image();
-    img.decoding = "async";
-    img.src = "frames/frame_" + String(i).padStart(5, "0") + ".png";
-    images.push(img);
+  function frameUrl(index) {
+    return "frames-webp/frame_" + String(index).padStart(5, "0") + ".webp";
+  }
+
+  function trimFrameCache() {
+    if (frameCache.size <= 18) return;
+    const oldest = [...frameCache.keys()]
+      .filter(index => index !== desiredFrame && index !== shown)
+      .sort((a, b) => Math.abs(b - desiredFrame) - Math.abs(a - desiredFrame));
+    while (frameCache.size > 18 && oldest.length) frameCache.delete(oldest.shift());
+  }
+
+  function pumpFrameQueue() {
+    while (activeFrameLoads < 3 && frameQueue.length) {
+      const index = frameQueue.shift();
+      queuedFrames.delete(index);
+      if (frameCache.has(index) || pendingFrames.has(index)) continue;
+      const img = new Image();
+      img.decoding = "async";
+      pendingFrames.set(index, img);
+      activeFrameLoads++;
+      img.onload = () => {
+        pendingFrames.delete(index);
+        activeFrameLoads--;
+        frameCache.set(index, img);
+        trimFrameCache();
+        if (index === desiredFrame) requestRender();
+        pumpFrameQueue();
+      };
+      img.onerror = () => {
+        pendingFrames.delete(index);
+        activeFrameLoads--;
+        pumpFrameQueue();
+      };
+      img.src = frameUrl(index);
+    }
+  }
+
+  function scheduleFrameWindow(target) {
+    desiredFrame = target;
+    frameQueue.length = 0;
+    queuedFrames.clear();
+    const nearby = [target];
+    for (let offset = 1; offset <= 8; offset++) nearby.push(target + offset);
+    for (let offset = 1; offset <= 2; offset++) nearby.push(target - offset);
+    nearby.forEach(index => {
+      if (index < 0 || index >= FRAME_COUNT || frameCache.has(index) || pendingFrames.has(index)) return;
+      if (!queuedFrames.has(index)) {
+        frameQueue.push(index);
+        queuedFrames.add(index);
+      }
+    });
+    pumpFrameQueue();
   }
 
   function clamp(value) { return Math.max(0, Math.min(1, value)); }
@@ -1675,9 +1730,21 @@ function goToArchive() {
     const progress = clamp(-intro.getBoundingClientRect().top / max);
     const target = Math.round(progress * (FRAME_COUNT - 1));
 
-    if (target !== shown && images[target] && images[target].complete) {
-      frame.src = images[target].src;
-      shown = target;
+    if (target !== desiredFrame) scheduleFrameWindow(target);
+    let targetImage = frameCache.get(target);
+    if (!targetImage) {
+      let nearestDistance = Infinity;
+      frameCache.forEach((image, index) => {
+        const distance = Math.abs(index - target);
+        if (distance < nearestDistance && distance <= 4) {
+          targetImage = image;
+          nearestDistance = distance;
+        }
+      });
+    }
+    if (targetImage && targetImage.src !== frame.src) {
+      frame.src = targetImage.src;
+      shown = Number(targetImage.src.match(/frame_(\d+)\.webp$/)?.[1] ?? target);
     }
 
     const p = clamp(progress / 0.82);
@@ -1709,6 +1776,7 @@ function goToArchive() {
 
   window.addEventListener("scroll", requestRender, { passive: true });
   window.addEventListener("resize", requestRender);
+  scheduleFrameWindow(0);
   requestRender();
 })();
 
@@ -2126,6 +2194,20 @@ function openAirpods01Page(pageName) {
   const detailView = document.getElementById('detail');
   const content = document.getElementById('airpods01DetailContent');
   if (!detailView || !content) return;
+
+  if (pageName === 'gallery') {
+    const gallery = document.getElementById('fullArchiveGallery');
+    if (gallery && gallery.dataset.mediaReady !== 'true') {
+      gallery.querySelectorAll('video').forEach((video) => {
+        if (video.dataset.poster) video.poster = video.dataset.poster;
+        video.querySelectorAll('source[data-src]').forEach((source) => {
+          source.src = source.dataset.src;
+        });
+        video.load();
+      });
+      gallery.dataset.mediaReady = 'true';
+    }
+  }
 
   content.hidden = false;
   content.dataset.page = pageName;
