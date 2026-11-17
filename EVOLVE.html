@@ -333,13 +333,13 @@ html, body {
   grid-template-columns: 1.05fr 0.95fr;
   gap: 64px;
   align-items: stretch;
-  min-height: 640px;
+  min-height: 660px;
 }
 
 .console-stage {
   position: relative;
   background: var(--surface);
-  min-height: 580px;
+  min-height: 600px;
   display: flex;
   flex-direction: column;
 }
@@ -348,6 +348,39 @@ html, body {
   width: 100%;
   flex: 1;
   --poster-color: transparent;
+}
+
+/* Shader Mode Switcher Overlay inside Stage */
+.shader-bar {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 6;
+  display: flex;
+  border: 1px solid var(--line);
+  background: rgba(250, 250, 250, 0.85);
+  backdrop-filter: blur(6px);
+}
+
+.shader-bar button {
+  background: none;
+  border: 0;
+  border-right: 1px solid var(--line);
+  padding: 6px 12px;
+  font-family: var(--font);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  color: var(--fg-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.shader-bar button:last-child { border-right: 0; }
+
+.shader-bar button.active,
+.shader-bar button:hover {
+  background: var(--fg);
+  color: #ffffff;
 }
 
 .stage-hotspots {
@@ -404,6 +437,13 @@ html, body {
   justify-content: space-between;
 }
 
+.console-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+
 .console-header .era {
   font-size: 12px;
   color: var(--fg-muted);
@@ -422,7 +462,62 @@ html, body {
   font-size: 15px;
   font-weight: 300;
   color: var(--fg-muted);
-  margin: 0 0 28px;
+  margin: 0 0 24px;
+}
+
+/* Web Audio Era Acoustic Simulator Control */
+.audio-sim-btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 14px;
+  border: 1px solid var(--fg);
+  background: transparent;
+  color: var(--fg);
+  font-family: var(--font);
+  font-size: 11.5px;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.audio-sim-btn.playing {
+  background: var(--fg);
+  color: #ffffff;
+}
+
+.eq-bars {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 12px;
+}
+
+.eq-bars i {
+  display: block;
+  width: 2px;
+  height: 4px;
+  background: currentColor;
+  transition: height 0.15s ease;
+}
+
+.audio-sim-btn.playing .eq-bars i:nth-child(1) { animation: eq 0.55s infinite alternate; }
+.audio-sim-btn.playing .eq-bars i:nth-child(2) { animation: eq 0.4s infinite alternate 0.15s; }
+.audio-sim-btn.playing .eq-bars i:nth-child(3) { animation: eq 0.65s infinite alternate 0.3s; }
+.audio-sim-btn.playing .eq-bars i:nth-child(4) { animation: eq 0.45s infinite alternate 0.1s; }
+
+@keyframes eq {
+  from { height: 3px; }
+  to { height: 12px; }
+}
+
+.audio-band-strip {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11.5px;
+  color: var(--fg-muted);
+  padding: 8px 0 18px;
 }
 
 .story-tabs {
@@ -431,7 +526,7 @@ html, body {
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
   padding: 14px 0;
-  margin-bottom: 28px;
+  margin-bottom: 24px;
   flex-wrap: wrap;
 }
 
@@ -495,13 +590,54 @@ html, body {
   line-height: 1.65;
 }
 
-.mini-specs {
+/* Anatomical Fit & Load Diagram + Specs Footer */
+.bottom-telemetry {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px 28px;
+  grid-template-columns: 150px 1fr;
+  gap: 24px;
   padding-top: 20px;
   border-top: 1px solid var(--line);
   margin-top: 24px;
+  align-items: center;
+}
+
+.fit-diagram-box {
+  border-right: 1px solid var(--line);
+  padding-right: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.fit-diagram-box svg {
+  width: 84px;
+  height: 92px;
+}
+
+.fit-zone {
+  fill: none;
+  stroke: rgba(0, 0, 0, 0.25);
+  stroke-width: 1.2;
+  transition: all 0.3s ease;
+}
+
+.fit-zone.active {
+  fill: #111111;
+  stroke: #111111;
+}
+
+.fit-caption {
+  margin-top: 6px;
+  font-size: 11px;
+  color: var(--fg);
+  font-weight: 400;
+}
+
+.mini-specs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 24px;
 }
 
 .mini-specs div span {
@@ -516,9 +652,35 @@ html, body {
   font-weight: 400;
 }
 
-/* 04. INTERACTIVE SPLIT COMPARISON SLIDER + CUSTOM MINIMAL TAB STRIPS */
+/* 04. INTERACTIVE SPLIT COMPARISON SLIDER + 1:1 REAL SCALE TOGGLE */
 .compare-section {
   border-top: 1px solid var(--line);
+}
+
+.scale-toggle-group {
+  display: flex;
+  border: 1px solid var(--line);
+}
+
+.scale-toggle-group button {
+  background: none;
+  border: 0;
+  border-right: 1px solid var(--line);
+  padding: 9px 16px;
+  font-family: var(--font);
+  font-size: 11.5px;
+  letter-spacing: 0.05em;
+  color: var(--fg-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.scale-toggle-group button:last-child { border-right: 0; }
+
+.scale-toggle-group button.active,
+.scale-toggle-group button:hover {
+  background: var(--fg);
+  color: #ffffff;
 }
 
 .compare-bar {
@@ -526,7 +688,6 @@ html, body {
   grid-template-columns: 1fr 1fr;
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
-  margin-bottom: 0;
 }
 
 .compare-side-tabs {
@@ -909,6 +1070,8 @@ html, body {
   .console-grid { grid-template-columns: 1fr; }
   .console-stage { min-height: 360px; }
   .h-card { flex: 0 0 300px; }
+  .bottom-telemetry { grid-template-columns: 1fr; }
+  .fit-diagram-box { border-right: 0; border-bottom: 1px solid var(--line); padding-bottom: 16px; }
   .compare-bar { grid-template-columns: 1fr; }
   .compare-side-tabs.left-side { border-right: 0; border-bottom: 1px solid var(--line); }
   .compare-side-tabs.right-side { justify-content: flex-start; }
@@ -976,6 +1139,13 @@ html, body {
 
     <div class="console-grid">
       <div class="console-stage">
+        <!-- 3D Shader Mode Toggle -->
+        <div class="shader-bar" id="shaderBar">
+          <button type="button" class="active" onclick="setShaderMode('pbr', this)">PBR</button>
+          <button type="button" onclick="setShaderMode('clay', this)">CLAY</button>
+          <button type="button" onclick="setShaderMode('xray', this)">X-RAY</button>
+        </div>
+
         <model-viewer
           id="consoleViewer"
           src="models/radio.glb"
@@ -998,10 +1168,23 @@ html, body {
 
       <div class="console-panel">
         <div>
-          <div class="console-header">
-            <div class="era" id="cEra"></div>
-            <h3 id="cTitle"></h3>
-            <div class="sub" id="cSub"></div>
+          <div class="console-header-row">
+            <div class="console-header">
+              <div class="era" id="cEra"></div>
+              <h3 id="cTitle"></h3>
+              <div class="sub" id="cSub"></div>
+            </div>
+
+            <!-- Real-Time Web Audio Era Acoustic Simulator -->
+            <button type="button" class="audio-sim-btn" id="audioSimBtn" onclick="toggleEraAudio()">
+              <span class="eq-bars"><i></i><i></i><i></i><i></i></span>
+              <span id="audioSimText">LISTEN ERA</span>
+            </button>
+          </div>
+
+          <div class="audio-band-strip">
+            <span id="cFreqRange">BANDWIDTH: 300Hz – 3.4kHz</span>
+            <span id="cNoiseProfile">PROFILE: ANALOG LINE HUM</span>
           </div>
 
           <div class="story-tabs" id="storyTabs">
@@ -1033,26 +1216,48 @@ html, body {
           </div>
         </div>
 
-        <div class="mini-specs">
-          <div><span>음향 변환 / 드라이버</span><strong id="cSpec1"></strong></div>
-          <div><span>질량 · 치수 · 착용 구조</span><strong id="cSpec2"></strong></div>
-          <div><span>전기적 규격 · 연결 방식</span><strong id="cSpec3"></strong></div>
-          <div><span>출시 연도 · 초기 가격 / 특허</span><strong id="cSpec4"></strong></div>
+        <!-- Anatomical Fit Map + Hardware Specs -->
+        <div class="bottom-telemetry">
+          <div class="fit-diagram-box">
+            <svg viewBox="0 0 100 110" aria-label="Anatomical Contact Map">
+              <!-- Minimal Head & Shoulder Silhouette -->
+              <path d="M36 18 C36 8, 64 8, 64 24 C64 34, 58 42, 54 46 L54 54 L76 62 L80 96 L20 96 L24 62 L44 54 L44 46 C39 42, 36 32, 36 18 Z" fill="none" stroke="rgba(0,0,0,0.22)" stroke-width="1.2"/>
+              <!-- Zone 1: Cranium / Headband -->
+              <path id="zone-cranium" class="fit-zone" d="M35 16 Q50 3 65 16" stroke-width="3.2"/>
+              <!-- Zone 2: Ear / Concha / Ear Canal -->
+              <circle id="zone-ear" class="fit-zone" cx="48" cy="27" r="4.5"/>
+              <!-- Zone 3: Hand Holding -->
+              <circle id="zone-hand" class="fit-zone" cx="31" cy="31" r="6"/>
+              <!-- Zone 4: Waist / Pocket Hub -->
+              <rect id="zone-waist" class="fit-zone" x="62" y="76" width="12" height="16" rx="1"/>
+            </svg>
+            <div class="fit-caption" id="cFitLabel">HAND · ~450g</div>
+          </div>
+
+          <div class="mini-specs">
+            <div><span>음향 변환 / 드라이버</span><strong id="cSpec1"></strong></div>
+            <div><span>질량 · 치수 · 착용 구조</span><strong id="cSpec2"></strong></div>
+            <div><span>전기적 규격 · 연결 방식</span><strong id="cSpec3"></strong></div>
+            <div><span>출시 연도 · 초기 가격 / 특허</span><strong id="cSpec4"></strong></div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- 04. DRAG SPLIT COMPARISON SLIDER + 6-ERA MATRIX -->
+<!-- 04. DRAG SPLIT COMPARISON SLIDER + 1:1 REAL SCALE TOGGLE + MATRIX -->
 <section class="compare-section" id="compare">
   <div class="container">
     <div class="sec-label">04 / Form Factor & Scale Shift</div>
     <div class="sec-head">
       <h2>450g의 유선 수화기에서<br>4g의 완전 무선 유닛까지</h2>
+      <div class="scale-toggle-group" id="scaleToggleGroup">
+        <button type="button" class="active" onclick="setScaleMode(false, this)">NORMALIZED VIEW</button>
+        <button type="button" onclick="setScaleMode(true, this)">1:1 REAL SCALE</button>
+      </div>
     </div>
 
-    <!-- Custom Minimal Era Tab Strips (No Native <select> Dropdown) -->
     <div class="compare-bar">
       <div class="compare-side-tabs left-side">
         <span class="side-tag">01 / LEFT</span>
@@ -1281,7 +1486,7 @@ html, body {
   render();
 })();
 
-/* DATA: RESEARCH-VERIFIED HARDWARE & HISTORICAL ARCHIVE */
+/* DATA: RESEARCH-VERIFIED HARDWARE, ACOUSTIC & ANATOMICAL ARCHIVE */
 const devices = [
   {
     era: "01 / 06 — 1880s–1890s",
@@ -1295,6 +1500,12 @@ const devices = [
     target: "auto auto auto",
     orbit: "0deg 72deg 110%",
     splitOrbit: "0deg 75deg 115%",
+    realScaleOrbit: "0deg 75deg 120%",
+    fitZones: ["hand", "ear"],
+    fitLabel: "HAND + EAR · ~450g",
+    freqLabel: "BANDWIDTH: 300Hz – 3.4kHz (NARROWBAND)",
+    noiseLabel: "PROFILE: 60Hz LINE HUM · MONAURAL",
+    audioFilter: { lowCut: 320, highCut: 3200, hissGain: 0.025, humGain: 0.035, warmth: 18 },
     desc: "1876년 3월 7일 등록된 벨의 전화기 특허(US Patent 174,465)를 상용화한 초기 수화기입니다. 진공관 증폭기가 발명되기 전이었기 때문에, 별도의 외부 전원 없이 전화선을 타고 흐르는 미세한 음성 전류만으로 연철 진동판을 울려 귀에 직접 밀착시켜야 청취할 수 있었습니다.",
     medium: "전자기 유도 코일 · 얇은 연철(Soft Iron) 진동판",
     hardware: "약 450g · 에보나이트(경질 고무) 원통 하우징 · 한 손 파지",
@@ -1326,6 +1537,12 @@ const devices = [
     target: "auto auto auto",
     orbit: "0deg 72deg 110%",
     splitOrbit: "0deg 75deg 115%",
+    realScaleOrbit: "0deg 75deg 110%",
+    fitZones: ["cranium", "ear"],
+    fitLabel: "CRANIUM + DUAL EAR · ~340g",
+    freqLabel: "BANDWIDTH: 450Hz – 4.2kHz (HIGH IMPEDANCE)",
+    noiseLabel: "PROFILE: RADIO STATIC · MICA RESONANCE",
+    audioFilter: { lowCut: 450, highCut: 4200, hissGain: 0.03, humGain: 0.015, warmth: 12 },
     desc: "1910년 유타주 솔트레이크시티의 엔지니어 나다니엘 볼드윈(Nathaniel Baldwin)이 특허(1910년 5월 10일 출원)를 획득한 Type C 헤드폰은 두 개의 리시버를 스프링 강철 헤드밴드로 연결한 현대 헤드폰 아키텍처의 원형입니다. 비자성 운모(Mica) 진동판과 고임피던스 코일을 적용해 기존 전화 수화기보다 월등히 높은 감도를 구현했습니다.",
     medium: "밸런스드 아마추어 · 비자성 운모(Mica) 진동판",
     hardware: "약 340g (15.2 × 27.9 × 7.6cm) · 직물 피복 이중 강철 밴드",
@@ -1356,6 +1573,12 @@ const devices = [
     target: "auto auto auto",
     orbit: "0deg 72deg 110%",
     splitOrbit: "0deg 75deg 115%",
+    realScaleOrbit: "0deg 75deg 185%",
+    fitZones: ["waist", "cranium", "ear"],
+    fitLabel: "WAIST (390g) + HEAD (45g)",
+    freqLabel: "BANDWIDTH: 60Hz – 14kHz (COMPACT CASSETTE)",
+    noiseLabel: "PROFILE: MAGNETIC TAPE HISS · ANALOG WARMTH",
+    audioFilter: { lowCut: 75, highCut: 12500, hissGain: 0.018, humGain: 0.004, warmth: 8 },
     desc: "1979년 7월 1일 일본에서 33,000엔에 출시된 Sony TPS-L2는 기자용 모노 녹음기 ‘프레스맨(TCM-100)’에서 녹음 헤드와 내장 스피커를 과감히 제거하고 스테레오 재생 회로만을 남긴 제품입니다. 390g의 알루미늄 본체와 45g 초경량 헤드폰(MDR-3L2)의 결합은 음악을 실내 가구에서 보행자의 일상으로 해방시켰습니다.",
     medium: "마그네틱 콤팩트 카세트테이프 (스테레오 재생 전용)",
     hardware: "본체 390g (88 × 133.5 × 29mm) + 45g 경량 헤드폰",
@@ -1386,6 +1609,12 @@ const devices = [
     target: "auto auto auto",
     orbit: "0deg 72deg 110%",
     splitOrbit: "0deg 75deg 115%",
+    realScaleOrbit: "0deg 75deg 320%",
+    fitZones: ["ear"],
+    fitLabel: "CONCHA ONLY · 12g (NO HEADBAND)",
+    freqLabel: "BANDWIDTH: 50Hz – 18kHz (OPEN EARBUD)",
+    noiseLabel: "PROFILE: OPEN-AIR LEAKAGE · SmCo MAGNET",
+    audioFilter: { lowCut: 130, highCut: 16500, hissGain: 0.008, humGain: 0, warmth: 4 },
     desc: "1982년 소니가 선보인 MDR-E252는 1910년 볼드윈 이래 70년 넘게 유지되던 ‘머리 위 헤드밴드’ 구조를 완전히 해체한 기념비적 제품입니다. 드라이버 유닛 직경을 16mm로 축소하여 사람의 귓바퀴(외이도 입구) 안쪽에 직접 끼워 넣는 ‘인이어(Earbud)’ 폼팩터를 세계 최초로 대중화했습니다.",
     medium: "16mm 초소형 다이내믹 드라이버 · 사마륨 코발트(SmCo) 자석",
     hardware: "약 12g (케이블 포함) · 귓바퀴 안착형 하우징 (헤드밴드 제거)",
@@ -1416,6 +1645,12 @@ const devices = [
     target: "auto auto auto",
     orbit: "0deg 72deg 110%",
     splitOrbit: "0deg 75deg 115%",
+    realScaleOrbit: "0deg 75deg 210%",
+    fitZones: ["waist", "ear"],
+    fitLabel: "POCKET HUB (135g) + TRRS EARBUD",
+    freqLabel: "BANDWIDTH: 20Hz – 19kHz (128kbps AAC DIGITAL)",
+    noiseLabel: "PROFILE: DIGITAL PCM · 4-POLE IN-LINE MIC",
+    audioFilter: { lowCut: 35, highCut: 18500, hissGain: 0.001, humGain: 0, warmth: 1 },
     desc: "2007년 1월 발표되어 6월 29일 출시된 1세대 iPhone은 ‘와이드스크린 iPod + 휴대전화 + 인터넷 커뮤니케이터’를 하나로 통합했습니다. 오디오 기기는 더 이상 별도의 전용 하드웨어를 필요로 하지 않게 되었고, 이어폰 케이블에는 통화용 마이크와 클릭 리모컨이 결합되었습니다.",
     medium: "내장 플래시 메모리 (4/8/16GB) · 모바일 스트리밍",
     hardware: "본체 135g (115 × 61 × 11.6mm) · 3.5mm 4극 TRRS 단자",
@@ -1446,6 +1681,12 @@ const devices = [
     target: "1.203m 0.380m 0.085m",
     orbit: "0deg 75deg 3.5m",
     splitOrbit: "0deg 75deg 3.4m",
+    realScaleOrbit: "0deg 75deg 11.5m",
+    fitZones: ["ear"],
+    fitLabel: "EAR CANAL ONLY · 4.0g (ZERO CABLE)",
+    freqLabel: "BANDWIDTH: 20Hz – 20kHz (FULL-RANGE + ANC)",
+    noiseLabel: "PROFILE: ZERO-NOISE FLOOR · ADAPTIVE DSP",
+    audioFilter: { lowCut: 20, highCut: 20000, hissGain: 0, humGain: 0, warmth: 0 },
     desc: "2016년 9월 발표되어 12월 13일 출시된 AirPods(A1523)는 1876년 벨의 수화기 이래 140년간 오디오 기기에 연결되어 있던 구리선을 완전히 제거했습니다. 유닛당 4.0g의 초경량 바디에 전용 Apple W1 무선 칩셋, 듀얼 광학 센서, 빔포밍 마이크를 집약해 이어폰을 독립된 웨어러블 컴퓨터로 진화시켰습니다.",
     medium: "클라우드 스트리밍 · 저전력 무선 디지털 오디오",
     hardware: "유닛당 4.0g (16.5×18.0×40.5mm) · 케이스 38g (398mAh)",
@@ -1466,10 +1707,175 @@ const devices = [
   }
 ];
 
+/* WEB AUDIO API REAL-TIME ERA ACOUSTIC SIMULATOR */
+let audioCtx = null;
+let isAudioPlaying = false;
+let noteTimer = null;
+let highPassNode = null;
+let lowPassNode = null;
+let hissGainNode = null;
+let humGainNode = null;
+
+function initAudioEngine() {
+  if (audioCtx) return;
+  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+  audioCtx = new AudioContextClass();
+
+  highPassNode = audioCtx.createBiquadFilter();
+  highPassNode.type = "highpass";
+  highPassNode.frequency.value = 300;
+
+  lowPassNode = audioCtx.createBiquadFilter();
+  lowPassNode.type = "lowpass";
+  lowPassNode.frequency.value = 3400;
+
+  const masterGain = audioCtx.createGain();
+  masterGain.gain.value = 0.22;
+
+  highPassNode.connect(lowPassNode);
+  lowPassNode.connect(masterGain);
+  masterGain.connect(audioCtx.destination);
+
+  // Analog Tape / Static Noise Generator
+  const bufferSize = audioCtx.sampleRate * 2;
+  const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+  const data = noiseBuffer.getChannelData(0);
+  for (let i = 0; i < bufferSize; i++) {
+    data[i] = Math.random() * 2 - 1;
+  }
+  const noiseSource = audioCtx.createBufferSource();
+  noiseSource.buffer = noiseBuffer;
+  noiseSource.loop = true;
+
+  hissGainNode = audioCtx.createGain();
+  hissGainNode.gain.value = 0;
+  noiseSource.connect(hissGainNode);
+  hissGainNode.connect(highPassNode);
+  noiseSource.start();
+
+  // 60Hz Line Hum Oscillator
+  const humOsc = audioCtx.createOscillator();
+  humOsc.type = "sawtooth";
+  humOsc.frequency.value = 60;
+  humGainNode = audioCtx.createGain();
+  humGainNode.gain.value = 0;
+  humOsc.connect(humGainNode);
+  humGainNode.connect(lowPassNode);
+  humOsc.start();
+
+  // Repeating Harmonic Reference Chord & Melody Loop
+  const notes = [261.63, 329.63, 392.00, 493.88, 523.25, 392.00, 329.63, 293.66];
+  let step = 0;
+  noteTimer = setInterval(() => {
+    if (!isAudioPlaying || !audioCtx) return;
+    const now = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const subOsc = audioCtx.createOscillator();
+    const env = audioCtx.createGain();
+
+    const freq = notes[step % notes.length];
+    osc.type = "triangle";
+    osc.frequency.setValueAtTime(freq, now);
+
+    subOsc.type = "sine";
+    subOsc.frequency.setValueAtTime(freq * 0.5, now);
+
+    env.gain.setValueAtTime(0.001, now);
+    env.gain.exponentialRampToValueAtTime(0.35, now + 0.04);
+    env.gain.exponentialRampToValueAtTime(0.001, now + 0.42);
+
+    osc.connect(env);
+    subOsc.connect(env);
+    env.connect(highPassNode);
+
+    osc.start(now);
+    subOsc.start(now);
+    osc.stop(now + 0.45);
+    subOsc.stop(now + 0.45);
+    step++;
+  }, 460);
+}
+
+function applyEraAudioFilter(d) {
+  if (!audioCtx || !highPassNode) return;
+  const now = audioCtx.currentTime;
+  const f = d.audioFilter;
+  highPassNode.frequency.setTargetAtTime(f.lowCut, now, 0.08);
+  lowPassNode.frequency.setTargetAtTime(f.highCut, now, 0.08);
+  hissGainNode.gain.setTargetAtTime(f.hissGain, now, 0.08);
+  humGainNode.gain.setTargetAtTime(f.humGain, now, 0.08);
+}
+
+function toggleEraAudio() {
+  initAudioEngine();
+  if (audioCtx.state === "suspended") audioCtx.resume();
+  isAudioPlaying = !isAudioPlaying;
+
+  const btn = document.getElementById("audioSimBtn");
+  const txt = document.getElementById("audioSimText");
+  btn.classList.toggle("playing", isAudioPlaying);
+  txt.textContent = isAudioPlaying ? "SIMULATING" : "LISTEN ERA";
+
+  if (isAudioPlaying) {
+    applyEraAudioFilter(devices[currentIdx]);
+  } else if (hissGainNode) {
+    const now = audioCtx.currentTime;
+    hissGainNode.gain.setTargetAtTime(0, now, 0.05);
+    humGainNode.gain.setTargetAtTime(0, now, 0.05);
+  }
+}
+
+/* 3D SHADER MODE TOGGLE (PBR / CLAY / X-RAY) */
+let currentShaderMode = "pbr";
+const originalMaterials = new WeakMap();
+
+function applyShaderToViewer(viewer, mode) {
+  if (!viewer || !viewer.model) return;
+  for (const mat of viewer.model.materials) {
+    if (!originalMaterials.has(mat)) {
+      originalMaterials.set(mat, {
+        baseColorFactor: [...mat.pbrMetallicRoughness.baseColorFactor],
+        metallicFactor: mat.pbrMetallicRoughness.metallicFactor,
+        roughnessFactor: mat.pbrMetallicRoughness.roughnessFactor,
+        alphaMode: mat.getAlphaMode()
+      });
+    }
+    const orig = originalMaterials.get(mat);
+    if (mode === "pbr") {
+      mat.pbrMetallicRoughness.setBaseColorFactor(orig.baseColorFactor);
+      mat.pbrMetallicRoughness.setMetallicFactor(orig.metallicFactor);
+      mat.pbrMetallicRoughness.setRoughnessFactor(orig.roughnessFactor);
+      mat.setAlphaMode(orig.alphaMode);
+    } else if (mode === "clay") {
+      mat.pbrMetallicRoughness.setBaseColorFactor([0.84, 0.84, 0.84, 1]);
+      mat.pbrMetallicRoughness.setMetallicFactor(0.05);
+      mat.pbrMetallicRoughness.setRoughnessFactor(0.85);
+      mat.setAlphaMode("OPAQUE");
+    } else if (mode === "xray") {
+      mat.pbrMetallicRoughness.setBaseColorFactor([0.25, 0.28, 0.32, 0.28]);
+      mat.pbrMetallicRoughness.setMetallicFactor(0.1);
+      mat.pbrMetallicRoughness.setRoughnessFactor(0.2);
+      mat.setAlphaMode("BLEND");
+    }
+  }
+}
+
+function setShaderMode(mode, btnEl) {
+  currentShaderMode = mode;
+  document.querySelectorAll("#shaderBar button").forEach(b => b.classList.remove("active"));
+  if (btnEl) btnEl.classList.add("active");
+  applyShaderToViewer(document.getElementById("consoleViewer"), mode);
+}
+
+document.getElementById("consoleViewer").addEventListener("load", () => {
+  applyShaderToViewer(document.getElementById("consoleViewer"), currentShaderMode);
+});
+
 /* BUILD HORIZONTAL TRACK, CONSOLE PILLS & SPLIT TAB STRIPS */
 let currentIdx = 0;
 let splitLeftIdx = 0;
 let splitRightIdx = 5;
+let isRealScale = false;
 
 const hTrack = document.getElementById("hTrack");
 const devicePills = document.getElementById("devicePills");
@@ -1537,7 +1943,7 @@ function scrollTrack(dir) {
   });
 })();
 
-/* 03. CONSOLE SELECTION, HOTSPOTS & TABS */
+/* 03. CONSOLE SELECTION, HOTSPOTS, FIT DIAGRAM & AUDIO FILTER */
 function selectDevice(idx) {
   currentIdx = (idx + devices.length) % devices.length;
   const d = devices[currentIdx];
@@ -1556,6 +1962,9 @@ function selectDevice(idx) {
   document.getElementById("cSub").textContent = d.subtitle;
   document.getElementById("cDesc").textContent = d.desc;
 
+  document.getElementById("cFreqRange").textContent = d.freqLabel;
+  document.getElementById("cNoiseProfile").textContent = d.noiseLabel;
+
   document.getElementById("cTechHead").textContent = d.techHeading;
   document.getElementById("cTechBody").textContent = d.techBody;
   document.getElementById("cCtxHead").textContent = d.contextHeading;
@@ -1569,6 +1978,17 @@ function selectDevice(idx) {
   document.getElementById("cSpec3").textContent = d.output;
   document.getElementById("cSpec4").textContent = d.modelRef;
 
+  // Update Anatomical Fit Diagram
+  ["cranium", "ear", "hand", "waist"].forEach(z => {
+    const el = document.getElementById(`zone-${z}`);
+    if (el) el.classList.toggle("active", d.fitZones.includes(z));
+  });
+  document.getElementById("cFitLabel").textContent = d.fitLabel;
+
+  // Update Audio Filter if Playing
+  if (isAudioPlaying) applyEraAudioFilter(d);
+
+  // Update Architecture Hotspots
   const hsWrap = document.getElementById("stageHotspots");
   const hsNote = document.getElementById("hotspotNote");
   hsNote.classList.remove("visible");
@@ -1631,7 +2051,14 @@ window.addEventListener("keydown", (e) => {
 
 selectDevice(0);
 
-/* 04. DRAG SPLIT COMPARISON SLIDER */
+/* 04. DRAG SPLIT COMPARISON SLIDER + 1:1 REAL SCALE TOGGLE */
+function setScaleMode(realScale, btnEl) {
+  isRealScale = realScale;
+  document.querySelectorAll("#scaleToggleGroup button").forEach(b => b.classList.remove("active"));
+  if (btnEl) btnEl.classList.add("active");
+  updateSplitDevices();
+}
+
 function setSplitSide(side, idx) {
   if (side === "left") {
     splitLeftIdx = idx;
@@ -1655,7 +2082,7 @@ function updateSplitDevices() {
   const lv = document.getElementById("splitLeftViewer");
   lv.src = l.src;
   lv.cameraTarget = l.target;
-  lv.cameraOrbit = l.splitOrbit;
+  lv.cameraOrbit = isRealScale ? l.realScaleOrbit : l.splitOrbit;
 
   document.getElementById("splitRightTag").textContent = `0${splitRightIdx + 1} — ${r.shortYear}`;
   document.getElementById("splitRightTitle").textContent = r.name;
@@ -1665,7 +2092,7 @@ function updateSplitDevices() {
   const rv = document.getElementById("splitRightViewer");
   rv.src = r.src;
   rv.cameraTarget = r.target;
-  rv.cameraOrbit = r.splitOrbit;
+  rv.cameraOrbit = isRealScale ? r.realScaleOrbit : r.splitOrbit;
 }
 
 updateSplitDevices();
